@@ -6,7 +6,6 @@ class ::Mutations::Goods::CreateGoods < Mutations::BaseMutation
   field :errors, [ String ], null: false
 
   def resolve(goods_input:)
-    debugger
     service = ::GoodsServices::CreateGoodsServices.new(goods_input.to_h).execute
 
     if service.success?
