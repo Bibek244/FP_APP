@@ -5,6 +5,7 @@ module Types
     # GOODS MUTATAIONS
     field :create_goods, mutation: Mutations::Goods::CreateGoods
     field :update_goods, mutation: Mutations::Goods::UpdateGoods
+    field :delete_goods, mutation: Mutations::Goods::DeleteGoods
 
     # LOGIN AND REGISTRAGTION MUTATIONS
     field :register_user, mutation: Mutations::Users::RegisterUser
