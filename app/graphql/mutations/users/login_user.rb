@@ -10,7 +10,7 @@ module Mutations
       field :user, Types::UserType, null: true
       field :message, String, null: true
       field :error, [ String ], null: true
-      field :token, String, null: false
+      field :token, String, null: true
 
       def resolve(email:, password:, group_id:)
         # user ={email: email, password: password, group_id: group_id}
@@ -33,7 +33,7 @@ module Mutations
               }
             else
               {
-                token: "",
+                token: [],
                 userlogin: nil,
                 message: "Incorrect Password",
                 error: user.errors.full_messages
@@ -41,7 +41,7 @@ module Mutations
             end
           else
             {
-              token: "",
+              token: [],
               userlogin: nil,
               message: "User is not present in this organization",
               error: [ "User not present" ]
@@ -49,7 +49,7 @@ module Mutations
           end
         else
           {
-            token: "",
+            token: [],
             userlogin: nil,
             message: "Invalid Group",
             error: [ "Group is not found" ]
