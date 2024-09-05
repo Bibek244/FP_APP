@@ -10,7 +10,7 @@ module Mutations
       field :user, Types::UserType, null: true
       field :message, String, null: true
       field :error, [ String ], null: true
-      field :token, String, null: false
+      field :token, String, null: true
 
       def resolve(email:, password:, group_id:)
         # user ={email: email, password: password, group_id: group_id}
