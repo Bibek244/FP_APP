@@ -33,7 +33,7 @@ module Mutations
               }
             else
               {
-                token: nil,
+                token: "",
                 userlogin: nil,
                 message: "Incorrect Password",
                 error: user.errors.full_messages
@@ -41,7 +41,7 @@ module Mutations
             end
           else
             {
-              token: nil,
+              token: "",
               userlogin: nil,
               message: "User is not present in this organization",
               error: [ "User not present" ]
@@ -49,7 +49,7 @@ module Mutations
           end
         else
           {
-            token: nil,
+            token: "",
             userlogin: nil,
             message: "Invalid Group",
             error: [ "Group is not found" ]
