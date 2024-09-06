@@ -6,17 +6,22 @@ class ::Mutations::Driver::DeleteDriver < Mutations::BaseMutation
   field :message, String, null: true
 
   def resolve(driver_id:)
-    driver = Driver.find(driver_id)
+    driver = Driver.find_by(id: driver_id)
     # driver.destroy(user_id: user_id)
     if driver.present?
       Driver.destroy(driver.id)
        {
           driver: nil,
           error: [],
-          message: "Driver is sucessfully deleted"
+          message: "Driver is removed sucessfuly"
        }
     else
-       raise GraphQL::ExecutionError, driver.errors.full_messages.join(", ")
+      {
+         driver: nil,
+      message: nil,
+      error: [ "Driver not found " ]
+      }
+
     end
   end
 end
