@@ -23,8 +23,11 @@ module Types
 
     # TODO: remove me
     field :goods, resolver: Resolvers::Goods::AllGoods,
-    description: "Resolver to get all goods"
+      description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
+    field :all_groups, resolver: Resolvers::Groups::AllGroups,
+      description: "Resolver to fetch all groups"
+    field :specific_group, resolver: Resolvers::Groups::SpecificGroup
   end
 end
