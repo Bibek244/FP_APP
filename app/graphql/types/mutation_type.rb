@@ -2,11 +2,12 @@
 
 module Types
   class MutationType < Types::BaseObject
-    # product or goods mutations
+    # GOODS MUTATAIONS
     field :create_goods, mutation: Mutations::Goods::CreateGoods
     field :update_goods, mutation: Mutations::Goods::UpdateGoods
+    field :delete_goods, mutation: Mutations::Goods::DeleteGoods
 
-    # user registrations and login mutations
+    # LOGIN AND REGISTRAGTION MUTATIONS
     field :register_user, mutation: Mutations::Users::RegisterUser
     field :login_user, mutation: Mutations::Users::LoginUser
   end
