@@ -24,6 +24,7 @@
         @errors.join(", ")
       end
 
+    private
       def call
         ActiveRecord::Base.transaction do
           @goods = Goods.create!(@goods_input.to_h)
