@@ -1,5 +1,5 @@
 module Types
-  module InputObject
+  module Goods
     class GoodsInputType < Types::BaseInputObject
       argument :name, String, required: true
       argument :sold_as, String, required: true
