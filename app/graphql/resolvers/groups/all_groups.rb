@@ -7,7 +7,7 @@ class Resolvers::Groups::AllGroups < Resolvers::BaseResolver
       groups.to_a
       { group: groups, message: "Successfully fetched all groups.", errors: [] }
     else
-      raise GraphQL::ExecutionError, { group: nil, message: nil, errors: [ "error: failed to fetch group" ] }
+      { group: nil, message: nil, errors: [ "error: failed to fetch group" ] }
     end
   end
 end
