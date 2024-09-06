@@ -22,7 +22,9 @@ module Types
     # They will be entry points for queries on your schema.
 
     # TODO: remove me
-    field :goods, resolver: Resolvers::Goods::AllGoods
-    # description: "An example field added by the generator"
+    field :goods, resolver: Resolvers::Goods::AllGoods,
+    description: "Resolver to get all goods"
+    field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
+     description: "Resolver to get specific goods"
   end
 end
