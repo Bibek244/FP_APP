@@ -24,5 +24,7 @@ module Types
     # TODO: remove me
     field :all_groups, resolver: Resolvers::Groups::AllGroups,
       description: "Resolver to fetch all groups"
+    field :specific_group, resolver: Resolvers::Groups::SpecificGroup,
+      description: "Resolver to fetch specific group"
   end
 end
