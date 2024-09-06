@@ -1,13 +1,13 @@
 class Resolvers::Goods::AllGoods < Resolvers::BaseResolver
-  type [ Types::Goods::GoodsType ], null: true
-
+  type Types::Goods::GoodsResultType, null: true
 
   def resolve
    goods =  Goods.all
    if goods.nil?
-    raise GraphQL::ExecutionError, { goods: nil, message: nil, error: [ "Could not featch goods." ] }
+    raise GraphQL::ExecutionError, { goods: nil, message: nil, errors: [ "Could not featch goods." ] }
    else
     goods.to_a
+    { goods: goods, message: "Successfully featched all the goods", errors: [] }
    end
   end
 end
