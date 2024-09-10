@@ -25,7 +25,7 @@ module Types
 
     # QUERY FOR GOODS
     field :goods, resolver: Resolvers::Goods::AllGoods,
-    description: "Resolver to get all goods"
+      description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
 
