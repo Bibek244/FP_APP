@@ -25,9 +25,15 @@ module Types
 
     # QUERY FOR GOODS
     field :goods, resolver: Resolvers::Goods::AllGoods,
-    description: "Resolver to get all goods"
+      description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
+
+    # QUERY FOR GROUPS
+    field :all_groups, resolver: Resolvers::Groups::AllGroups,
+      description: "Resolver to fetch all groups"
+    field :specific_group, resolver: Resolvers::Groups::SpecificGroup,
+      description: "Resolver for specific group"
 
     # QUERY FOR VEHICLES
     field :vehicles, resolver: Resolvers::Vehicles::AllVehicles,
