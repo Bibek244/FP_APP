@@ -32,5 +32,7 @@ module Types
     # QUERY FOR VEHICLES
     field :vehicles, resolver: Resolvers::Vehicles::AllVehicles,
       description: "Resolver to fetch all vehicle"
+    field :specific_vehicle, resolver: Resolvers::Vehicles::SpecificVehicle,
+      description: "Resolver to fetch specific vehicle"
   end
 end
