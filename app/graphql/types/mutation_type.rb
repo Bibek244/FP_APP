@@ -10,5 +10,8 @@ module Types
     # LOGIN AND REGISTRAGTION MUTATIONS
     field :register_user, mutation: Mutations::Users::RegisterUser
     field :login_user, mutation: Mutations::Users::LoginUser
+
+    # VEHICLES MUTATIONS
+    field :create_vehicle, mutation: Mutations::Vehicles::CreateVehicle
   end
 end
