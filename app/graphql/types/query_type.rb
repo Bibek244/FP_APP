@@ -3,6 +3,8 @@
 module Types
   class QueryType < GraphQL::Schema::Object
     field :driver, resolver: Resolvers::Driver::SpecificDriver
+    # field :alldrivers, resolver: Resolvers::Driver::AllDrivers
+
     field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
     argument :id, ID, required: true, description: "ID of the object."
     end
