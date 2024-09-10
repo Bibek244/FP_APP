@@ -4,7 +4,7 @@ class CreateVehicles < ActiveRecord::Migration[7.2]
       t.string :license_plate
       t.string :brand
       t.string :model
-      t.string :type
+      t.string :vehicle_type
       t.integer :status
       t.integer :capacity
       t.references :group, null: false, foreign_key: true
