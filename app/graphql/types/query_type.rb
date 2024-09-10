@@ -22,12 +22,17 @@ module Types
     # They will be entry points for queries on your schema.
 
     # TODO: remove me
+
+    # QUERY FOR GOODS
     field :goods, resolver: Resolvers::Goods::AllGoods,
       description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
-    field :all_groups, resolver: Resolvers::Groups::AllGroups,
-      description: "Resolver to fetch all groups"
-    field :specific_group, resolver: Resolvers::Groups::SpecificGroup
+
+    # QUERY FOR VEHICLES
+    field :vehicles, resolver: Resolvers::Vehicles::AllVehicles,
+      description: "Resolver to fetch all vehicle"
+    field :specific_vehicle, resolver: Resolvers::Vehicles::SpecificVehicle,
+      description: "Resolver to fetch specific vehicle"
   end
 end
