@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_09_113631) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_10_071043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_09_113631) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "line_items", force: :cascade do |t|
+    t.bigint "goods_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["goods_id"], name: "index_line_items_on_goods_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -64,6 +72,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_09_113631) do
     t.index ["group_id"], name: "index_vehicles_on_group_id"
   end
 
+  add_foreign_key "line_items", "goods", column: "goods_id"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "vehicles", "groups"
