@@ -4,10 +4,10 @@ class Resolvers::Vehicles::AllVehicles < Resolvers::BaseResolver
   def resolve
    vehicles =  Vehicle.all
    if vehicles.nil?
-     { vehicles: nil, message: "No vehicles found.", errors: [] }
+     { vehicle: nil, message: "No vehicles found.", errors: [] }
    else
     vehicles.to_a
-    { vehicles: vehicle, message: "Successfully featched all the vehicles", errors: [] }
+    { vehicle: vehicles, message: "Successfully featched all the vehicles", errors: [] }
    end
   rescue => err
      raise GraphQL::ExecutionError, "An error occurred while fetching vehicles: #{err.message}"
