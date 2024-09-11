@@ -10,9 +10,52 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_05_080850) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "customer_branches", force: :cascade do |t|
+    t.string "branch_location"
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_customer_branches_on_customer_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "phone"
+    t.string "email"
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_customers_on_group_id"
+  end
+
+  create_table "drivers", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.integer "phone_no"
+    t.string "address"
+    t.integer "status", default: 0, null: false
+    t.bigint "group_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_drivers_on_group_id"
+    t.index ["user_id"], name: "index_drivers_on_user_id"
+  end
+
+  create_table "goods", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.string "sold_as"
+    t.string "unit"
+    t.integer "availability"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "drivers", force: :cascade do |t|
     t.string "name"
@@ -51,12 +94,32 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_05_080850) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "jti"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "vehicles", force: :cascade do |t|
+    t.string "license_plate"
+    t.string "brand"
+    t.string "model"
+    t.string "vehicle_type"
+    t.integer "status"
+    t.integer "capacity"
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_vehicles_on_group_id"
+  end
+
+  add_foreign_key "customer_branches", "customers"
+  add_foreign_key "customers", "groups"
+  add_foreign_key "drivers", "groups"
+  add_foreign_key "drivers", "users"
   add_foreign_key "drivers", "groups"
   add_foreign_key "drivers", "users"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
+  add_foreign_key "vehicles", "groups"
 end
