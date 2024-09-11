@@ -1,7 +1,7 @@
 class ::Mutations::Customer::UpdateCustomer < Mutations::BaseMutation
   argument :name, String, required: true
   argument  :address, String, required: true
-  argument  :phone, Integer, required: true
+  argument  :phone, String, required: true
   argument  :email, String, required: true
   argument  :customer_id, ID, required: true
 
