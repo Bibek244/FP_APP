@@ -23,18 +23,19 @@ module Mutations
           if user.present?
             if user.valid_password?(password)
             # token = JWT.encode({ user_id: user.id }, "secret", "HS256")
+            jti = SecureRandom.uuid
+            user.update(jti: jti)
             token = JWT.encode({ user_id: user.id, group_id: group_id, exp: 24.hour.from_now.to_i }, "secret", "HS256")
-
               {
                 token: token,
-                userlogin: user,
+                user: user,
                 message: "Login Sucessfull",
                 error: []
               }
             else
               {
                 token: [],
-                userlogin: nil,
+                user: nil,
                 message: "Incorrect Password",
                 error: user.errors.full_messages
               }
@@ -42,7 +43,7 @@ module Mutations
           else
             {
               token: [],
-              userlogin: nil,
+              user: nil,
               message: "User is not present in this organization",
               error: [ "User not present" ]
             }
@@ -50,7 +51,7 @@ module Mutations
         else
           {
             token: [],
-            userlogin: nil,
+            user: nil,
             message: "Invalid Group",
             error: [ "Group is not found" ]
           }

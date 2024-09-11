@@ -60,4 +60,3 @@ gem "devise", "~> 4.9", ">= 4.9.4"
 gem "devise-jwt"
 gem "graphql", "~> 2.3", ">= 2.3.14"
 gem "graphiql-rails", group: :development
-gem "jwt", "~> 2.8", ">= 2.8.2"
