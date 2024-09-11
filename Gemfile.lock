@@ -343,6 +343,7 @@ DEPENDENCIES
   graphql (~> 2.3, >= 2.3.14)
   importmap-rails
   jbuilder
+  jwt (~> 2.8, >= 2.8.2)
   pg (~> 1.1)
   puma (>= 5.0)
   rack-cors (~> 2.0, >= 2.0.2)
