@@ -4,6 +4,8 @@ module Types
   class QueryType < Types::BaseObject
     field :customer, resolver: Resolvers::Customer::SpecificCustomer
     field :all_customers, resolver: Resolvers::Customer::AllCustomers
+    field :customerBranch, resolver: Resolvers::CustomerBranch::SpecificBranch
+    field :allBranches, resolver: Resolvers::CustomerBranch::AllBranches
 
     field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
       argument :id, ID, required: true, description: "ID of the object."
