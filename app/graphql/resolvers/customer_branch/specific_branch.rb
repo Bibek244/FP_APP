@@ -1,5 +1,5 @@
 class ::Resolvers::CustomerBranch::SpecificBranch < Resolvers::BaseResolver
-  type Types::CustomerBranchType, null: true
+  type Types::CustomerBranch::CustomerBranchType, null: true
 
   argument :id, ID, required: true
 
