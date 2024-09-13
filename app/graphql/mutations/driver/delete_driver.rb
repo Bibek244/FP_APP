@@ -1,27 +1,25 @@
 class ::Mutations::Driver::DeleteDriver < Mutations::BaseMutation
   argument :driver_id, ID, required: true
 
-  field :driver, Types::DriverType, null: true
-  field :error, [ String ], null: false
-  field :message, String, null: true
+  type Types::Driver::DriverResultType, null: true
 
   def resolve(driver_id:)
-    driver = Driver.find_by(id: driver_id)
-    # driver.destroy(user_id: user_id)
-    if driver.present?
-      Driver.destroy(driver.id)
-       {
-          driver: nil,
-          error: [],
-          message: "Driver is removed sucessfuly"
-       }
+    service = ::DriverServices::DeleteDriverServices.new(driver_id).execute
+
+    if service.success?
+      {
+        driver: service.driver,
+        message: "Sucessfully deleted the Driver",
+        errors: nil,
+        success: true
+      }
     else
       {
-         driver: nil,
-      message: nil,
-      error: [ "Driver not found " ]
+        customer: nil,
+        message: nil,
+        errors: service.errors,
+        success: false
       }
-
     end
   end
 end

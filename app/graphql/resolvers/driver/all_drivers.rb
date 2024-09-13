@@ -1,7 +1,8 @@
 class ::Resolvers::Driver::AllDrivers < Resolvers::BaseResolver
-  type [ Types::DriverType ], null: false
+  type [ Types::Driver::DriverType ], null: false
 
-  def resolve
-    Driver.all
+  argument :group_id, ID, required: true
+  def resolve(group_id:)
+    Driver.where(group_id: group_id)
   end
 end
