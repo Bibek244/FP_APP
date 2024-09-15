@@ -25,5 +25,6 @@ module Types
 
     # ORDER MUTATIONS
     field :create_order_group, mutation: Mutations::OrderGroups::CreateOrderGroup
+    field :update_order_group, mutation: Mutations::OrderGroups::UpdateOrderGroup
   end
 end
