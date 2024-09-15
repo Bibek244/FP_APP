@@ -4,5 +4,5 @@ class OrderGroup < ApplicationRecord
   belongs_to :customer_branch
   has_many :line_items, dependent: :destroy
 
-  validates :group, presence: true
+  validates :group, :customer, :customer_branch, presence: true
 end
