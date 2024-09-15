@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_15_080759) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_15_110755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -75,6 +75,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_080759) do
     t.datetime "updated_at", null: false
     t.bigint "customer_id", null: false
     t.bigint "customer_branch_id", null: false
+    t.boolean "recurring", default: false
+    t.string "recurrence_frequency"
+    t.date "next_due_date"
+    t.date "recurrence_end_date"
     t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
     t.index ["customer_id"], name: "index_order_groups_on_customer_id"
     t.index ["group_id"], name: "index_order_groups_on_group_id"
