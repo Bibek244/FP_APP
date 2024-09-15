@@ -22,5 +22,8 @@ module Types
     field :create_vehicle, mutation: Mutations::Vehicles::CreateVehicle
     field :update_vehicle, mutation: Mutations::Vehicles::UpdateVehicle
     field :delete_vehicle, mutation: Mutations::Vehicles::DeleteVehicle
+
+    # ORDER MUTATIONS
+    field :create_order_group, mutation: Mutations::OrderGroups::CreateOrderGroup
   end
 end
