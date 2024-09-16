@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
 module Types
-  class QueryType < Types::BaseObject
-    field :customer, resolver: Resolvers::Customer::SpecificCustomer
-    field :all_customers, resolver: Resolvers::Customer::AllCustomers
-    field :customerBranch, resolver: Resolvers::CustomerBranch::SpecificBranch
-    field :allBranches, resolver: Resolvers::CustomerBranch::AllBranches
-
+  class QueryType < GraphQL::Schema::Object
     field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
-      argument :id, ID, required: true, description: "ID of the object."
+    argument :id, ID, required: true, description: "ID of the object."
     end
 
     def node(id:)
       context.schema.object_from_id(id, context)
     end
+
 
     field :nodes, [ Types::NodeType, null: true ], null: true, description: "Fetches a list of objects given a list of IDs." do
       argument :ids, [ ID ], required: true, description: "IDs of the objects."
@@ -45,7 +41,21 @@ module Types
       description: "Resolver to fetch all vehicle"
     field :specific_vehicle, resolver: Resolvers::Vehicles::SpecificVehicle,
       description: "Resolver to fetch specific vehicle"
-    field :status_enum_values, resolver: Resolvers::Vehicles::AllStatus,
-      description: "Retrieve the possible values for the StatusType enum"
+
+    # Query for driver
+    field :StatusEnum, resolver: Resolvers::Driver::DriverStatus
+    description :"Retrive all the status available for driver"
+
+    # QUERY FOR CUSTOMER
+    field :customer, resolver: Resolvers::Customer::SpecificCustomer, description: "Resolver to Fetch a specific Customer"
+    field :all_customers, resolver: Resolvers::Customer::AllCustomers, description: "Resolver to Fetch all customer "
+
+    # QUERY FOR CUSTOMERBRANCH
+    field :customerBranch, resolver: Resolvers::CustomerBranch::SpecificBranch, description: "Resolver to Fetch a specific Branch"
+    field :allBranches, resolver: Resolvers::CustomerBranch::AllBranches, description: "Resolver to Fetch all Branches of a customer"
+
+    # QUERY FOR DRIVER
+    field :driver, resolver: Resolvers::Driver::SpecificDriver, description: "Resolver for Specific Driver "
+    field :alldrivers, resolver: Resolvers::Driver::AllDrivers, description: "Resolver for all Driver in an Group "
   end
 end
