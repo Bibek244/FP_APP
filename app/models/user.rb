@@ -7,4 +7,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
          has_many :memberships
          has_many :groups, through: :memberships
+         has_many :drivers
 end

@@ -6,4 +6,5 @@ class Vehicle < ApplicationRecord
 
 
   belongs_to :group
+  has_many:delivery_orders
 end
