@@ -51,5 +51,7 @@ module Types
     # Query FOR ORDER_Group
     field :all_order_group, resolver: Resolvers::OrderGroups::AllOrderGroup,
       description: "Resolver to fetch all order_groups"
+    field :specific_order_group, resolver: Resolvers::OrderGroups::SpecificOrderGroup,
+      description: "Resolver to fetch specific order group"
   end
 end
