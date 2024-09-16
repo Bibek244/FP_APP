@@ -7,4 +7,5 @@ class Driver < ApplicationRecord
   validates :phone_no, presence: true, uniqueness: { scope: :group_id }
   validates :name, presence: true
   validates :address, presence: true
+  has_many :delivery_orders
 end

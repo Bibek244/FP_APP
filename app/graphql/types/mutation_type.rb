@@ -35,5 +35,9 @@ module Types
     field :create_order_group, mutation: Mutations::OrderGroups::CreateOrderGroup
     field :update_order_group, mutation: Mutations::OrderGroups::UpdateOrderGroup
     field :delete_order_group, mutation: Mutations::OrderGroups::DeleteOrderGroup
+
+    #DELIVERY ORDER MUTATIONS
+    field :create_delivery_order, mutation: Mutations::DeliveryOrder::CreateDeliveryOrder
+    field :update_delivery_order, mutation: Mutations::DeliveryOrder::UpdateDeliveryOrder
   end
 end
