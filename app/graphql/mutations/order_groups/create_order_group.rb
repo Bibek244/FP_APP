@@ -5,6 +5,7 @@ argument :create_order, Types::OrderGroups::OrderGroupInputType, required: true
 
 type Types::OrderGroups::OrderGroupResultType, null: false
   def resolve(create_order:)
+    debugger
     service = ::OrderGroupServices::CreateOrderGroup.new(create_order.to_h).execute
 
     if service.success?
