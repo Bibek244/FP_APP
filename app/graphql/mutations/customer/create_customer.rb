@@ -5,7 +5,7 @@ argument :customer_input, Types::Customer::CustomerInputType, required: true
 
   def resolve(customer_input:)
     authorize
-    service = ::CustomerServices::CreateCustomerServices.new(customer_input.to_h).execute
+    service = ::CustomerServices::CreateCustomerService.new(customer_input.to_h).execute
 
     if service.success?
       {
