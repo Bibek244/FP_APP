@@ -4,6 +4,8 @@ class Resolvers::Groups::SpecificGroup < Resolvers::BaseResolver
   argument :id, ID, required: true
 
   def resolve(id:)
+    authorize
+
     group = Group.where(id: id)
     if group.present?
       group.to_a

@@ -4,6 +4,7 @@ class ::Mutations::Goods::DeleteGoods < Mutations::BaseMutation
   type Types::Goods::GoodsResultType, null: false
 
   def resolve(goods_id)
+    authorize
     service =  ::GoodsServices::DeleteGoodsServices.new(goods_id).execute
 
     if service.success?

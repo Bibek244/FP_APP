@@ -4,6 +4,8 @@ class Resolvers::Goods::SpecificGoods < Resolvers::BaseResolver
   type Types::Goods::GoodsResultType, null: false
 
   def resolve(goods_id:)
+    authorize
+
     goods = Goods.where(id: goods_id)
     if goods.present?
       { goods: goods, message: "Successfully fetched the goods", errors: [] }

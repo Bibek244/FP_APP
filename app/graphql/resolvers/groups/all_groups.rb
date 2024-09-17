@@ -2,6 +2,8 @@ class Resolvers::Groups::AllGroups < Resolvers::BaseResolver
   type Types::Groups::GroupReturnType, null: false
 
   def resolve
+    authorize
+
     groups = Group.all
     if groups.present?
       groups.to_a

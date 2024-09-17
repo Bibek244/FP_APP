@@ -5,6 +5,7 @@ class ::Mutations::Driver::UpdateDriver < Mutations::BaseMutation
   type Types::Driver::DriverResultType, null: true
 
   def resolve(driver_id:, driver_input:)
+    authorize
     service = DriverServices::UpdateDriverService.new(driver_id, driver_input.to_h).execute
     if service.success?
       {

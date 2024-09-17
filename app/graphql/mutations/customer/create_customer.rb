@@ -4,6 +4,7 @@ argument :customer_input, Types::Customer::CustomerInputType, required: true
   type Types::Customer::CustomerResultType, null: false
 
   def resolve(customer_input:)
+    authorize
     service = ::CustomerServices::CreateCustomerServices.new(customer_input.to_h).execute
 
     if service.success?

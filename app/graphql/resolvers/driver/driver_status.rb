@@ -3,6 +3,8 @@ class ::Resolvers::Driver::DriverStatus < Resolvers::BaseResolver
   # field :description, String, null: true
 
   def resolve
+    authorize
+
     Types::Driver::StatusEnum.values.keys
   end
 end

@@ -3,7 +3,8 @@ class ::Mutations::Goods::CreateGoods < Mutations::BaseMutation
 
   type Types::Goods::GoodsResultType, null: false
 
-  def resolve(goods_input:)
+  def resolve(goods_input:) 
+    authorize     
     service = ::GoodsServices::CreateGoodsServices.new(goods_input.to_h).execute
 
     if service.success?
