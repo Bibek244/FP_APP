@@ -4,7 +4,6 @@ class Mutations::OrderGroups::DeleteOrderGroup < Mutations::BaseMutation
   type Types::OrderGroups::OrderGroupResultType, null: false
 
   def resolve(order_id:)
-    binding.irb
    service = ::OrderGroupServices::DeleteOrderGroup.new(order_id).execute
 
    if service.success

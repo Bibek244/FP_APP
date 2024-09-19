@@ -19,7 +19,6 @@ module OrderGroupServices
     end
 
     def execute
-      binding.irb
       call
       self
     end
