@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  goods: one
+  quantity: 1
+
+two:
+  goods: two
+  quantity: 1

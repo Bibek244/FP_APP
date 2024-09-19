@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_15_080759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,20 +33,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
     t.index ["group_id"], name: "index_customers_on_group_id"
   end
 
-  create_table "drivers", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.integer "phone_no"
-    t.string "address"
-    t.integer "status", default: 0, null: false
-    t.bigint "group_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_drivers_on_group_id"
-    t.index ["user_id"], name: "index_drivers_on_user_id"
-  end
-
   create_table "goods", force: :cascade do |t|
     t.string "name"
     t.string "category"
@@ -63,6 +49,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "line_items", force: :cascade do |t|
+    t.bigint "goods_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "order_group_id", null: false
+    t.index ["goods_id"], name: "index_line_items_on_goods_id"
+    t.index ["order_group_id"], name: "index_line_items_on_order_group_id"
+  end
+
   create_table "memberships", force: :cascade do |t|
     t.bigint "group_id", null: false
     t.bigint "user_id", null: false
@@ -70,6 +66,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_memberships_on_group_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "order_groups", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.date "planned_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "customer_id", null: false
+    t.bigint "customer_branch_id", null: false
+    t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
+    t.index ["customer_id"], name: "index_order_groups_on_customer_id"
+    t.index ["group_id"], name: "index_order_groups_on_group_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,9 +109,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_075210) do
 
   add_foreign_key "customer_branches", "customers"
   add_foreign_key "customers", "groups"
-  add_foreign_key "drivers", "groups"
-  add_foreign_key "drivers", "users"
+  add_foreign_key "line_items", "goods", column: "goods_id"
+  add_foreign_key "line_items", "order_groups"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
+  add_foreign_key "order_groups", "customer_branches"
+  add_foreign_key "order_groups", "customers"
+  add_foreign_key "order_groups", "groups"
   add_foreign_key "vehicles", "groups"
 end

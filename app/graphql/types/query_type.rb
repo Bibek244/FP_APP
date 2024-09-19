@@ -47,5 +47,11 @@ module Types
       description: "Resolver to fetch specific vehicle"
     field :status_enum_values, resolver: Resolvers::Vehicles::AllStatus,
       description: "Retrieve the possible values for the StatusType enum"
+
+    # Query FOR ORDER_Group
+    field :all_order_group, resolver: Resolvers::OrderGroups::AllOrderGroup,
+      description: "Resolver to fetch all order_groups"
+    field :specific_order_group, resolver: Resolvers::OrderGroups::SpecificOrderGroup,
+      description: "Resolver to fetch specific order group"
   end
 end
