@@ -6,9 +6,9 @@ class RecurringOrderJob
       order_group = delivery_order.order_group
       if order_group.active_recurring?
         if Time.current > order_group.next_due_date
-          update_delivery_order(delivery_order, order_group.next_due_date)
           next_due_date = calculate_next_due_date(order_group)
           order_group.update!(next_due_date: next_due_date)
+          update_delivery_order(delivery_order, order_group.next_due_date)
         end
       end
     end
