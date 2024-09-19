@@ -3,9 +3,10 @@ class ::Mutations::Goods::DeleteGoods < Mutations::BaseMutation
 
   type Types::Goods::GoodsResultType, null: false
 
-  def resolve(goods_id)
+  def resolve(goods_id:)
     authorize
-    service =  ::GoodsServices::DeleteGoodsServices.new(goods_id).execute
+    current_user = context[:current_user]
+    service =  ::GoodsServices::DeleteGoodsServices.new(goods_id, current_user).execute
 
     if service.success?
       { goods: [ service.goods ], message: "successfully deleted the product.", errors: [] }

@@ -1,11 +1,12 @@
 class ::Mutations::Customer::CreateCustomer < Mutations::BaseMutation
-argument :customer_input, Types::Customer::CustomerInputType, required: true
+  argument :customer_input, Types::Customer::CustomerInputType, required: true
 
   type Types::Customer::CustomerResultType, null: false
 
   def resolve(customer_input:)
     authorize
-    service = ::CustomerServices::CreateCustomerService.new(customer_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::CustomerServices::CreateCustomerService.new(customer_input.to_h, current_user).execute
 
     if service.success?
       {

@@ -5,8 +5,8 @@ class ::Mutations::Vehicles::CreateVehicle < ::Mutations::BaseMutation
 
   def resolve(vehicle_input:)
     authorize
-
-    service = ::VehiclesServices::CreateVehiclesServices.new(vehicle_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::VehiclesServices::CreateVehiclesServices.new(vehicle_input.to_h, current_user).execute
 
     if service.success?
       { vehicle: [ service.vehicle ], message: "successfully created a vehicle", errors: [] }

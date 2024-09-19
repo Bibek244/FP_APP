@@ -4,8 +4,9 @@ module CustomerServices
     attr_accessor :errors, :success, :customer
     attr_reader :customer_input
 
-    def initialize(customer_input = {})
+    def initialize(customer_input = {}, current_user = {})
       @customer_input = customer_input
+      @current_user = current_user
       @success = false
       @errors = []
       @message = ""
@@ -28,10 +29,15 @@ module CustomerServices
   private
     def call
       begin
-        ActiveRecord::Base.transaction do
-          @customer = Customer.create!(@customer_input.to_h)
+        ActsAsTenant.current_tenant = current_user.group 
+        @customer = Customer.new(@customer_input.merge(user_id: current_user.id, group_id: current_user.group_id))
+        if @customer.save!
           @success = true
           @errors = []
+          @message = ""
+        else
+          @success = false
+          @error = ["Cannot create new customer"]
           @message = ""
         end
       rescue ActiveRecord::RecordInvalid => err
@@ -41,6 +47,10 @@ module CustomerServices
         @success = false
         @errors << err.message
       end
+    end
+
+    def current_user
+      @current_user
     end
   end
 end

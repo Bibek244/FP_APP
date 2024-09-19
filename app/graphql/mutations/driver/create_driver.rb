@@ -5,7 +5,8 @@ class ::Mutations::Driver::CreateDriver < Mutations::BaseMutation
 
   def resolve(driver_input:)
     authorize
-    service = ::DriverServices::CreateDriverServices.new(driver_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::DriverServices::CreateDriverServices.new(driver_input.to_h, current_user).execute
 
     if service.success?
       {

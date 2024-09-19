@@ -5,7 +5,8 @@ class ::Mutations::Goods::CreateGoods < Mutations::BaseMutation
 
   def resolve(goods_input:) 
     authorize     
-    service = ::GoodsServices::CreateGoodsServices.new(goods_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::GoodsServices::CreateGoodsServices.new(goods_input.to_h, current_user).execute
 
     if service.success?
       { goods: [ service.goods ], message: "Successfully created a product.", errors: [] }

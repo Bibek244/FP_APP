@@ -6,7 +6,8 @@ class ::Mutations::Driver::UpdateDriver < Mutations::BaseMutation
 
   def resolve(driver_id:, driver_input:)
     authorize
-    service = DriverServices::UpdateDriverService.new(driver_id, driver_input.to_h).execute
+    current_user = context[:current_user]
+    service = DriverServices::UpdateDriverService.new(driver_id, driver_input.to_h, current_user).execute
     if service.success?
       {
         driver: service.driver,

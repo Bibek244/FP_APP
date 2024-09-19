@@ -16,15 +16,19 @@ group.each do |grp|
   Group.find_or_create_by(name: grp[:name])
 end
 user_data = [
-  { email: "zzz@mail.com", password: "zzz@mail.com", group_name: "XYZ" }
+  { email: "zzz@mail.com", password: "zzz@mail.com", group_id: 1 },
+  { email: "xxx@mail.com", password: "xxx@mail.com", group_id: 2 }
 ]
 user_data.each do |user|
   created_user = User.find_or_create_by(email: user[:email]) do |u|
     u.password = user[:password]
+    u.group_id = user[:group_id]
   end
-  # Find the group by name
-  group = Group.find_by(name: user[:group_name])
+
+  # Find the group by id
+  group = Group.find_by(id: user[:group_id])
   next unless group # Skip if the group is not found
+
   # Create the membership
-  Membership.find_or_create_by(user_id: created_user.id, group_id: group.id)
+  Membership.find_or_create_by(user_id: created_user.id, group_id: created_user.group.id) 
 end

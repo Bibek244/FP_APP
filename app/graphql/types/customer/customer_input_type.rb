@@ -5,7 +5,6 @@ module Types
       argument :address, String, required: true
       argument :phone, Integer, required: true
       argument :email, String, required: true
-      argument :group_id, ID, required: true
     end
   end
 end

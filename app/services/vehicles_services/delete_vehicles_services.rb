@@ -3,8 +3,9 @@ module VehiclesServices
     attr_accessor :success, :errors, :vehicle
     attr_reader :vehicle_id
 
-    def initialize(vehicle_id)
+    def initialize(vehicle_id, current_user)
       @vehicle_id = vehicle_id
+      @current_user =current_user
       @success = false
       @errors = []
     end
@@ -26,6 +27,7 @@ module VehiclesServices
 
     def call
       ActiveRecord::Base.transaction do
+        ActsAsTenant.current_tenant = @current_user.group
         @vehicle = Vehicle.find_by(id: @vehicle_id)
         @vehicle.destroy
         @success = true

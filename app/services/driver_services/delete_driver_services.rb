@@ -3,8 +3,9 @@ module DriverServices
     attr_accessor :errors, :success, :driver, :message
     attr_reader :driver_id
 
-    def initialize(driver_id)
+    def initialize(driver_id, current_user)
       @driver_id = driver_id
+      @current_user = current_user
       @errors = []
       @success = false
       @message = ""
@@ -27,6 +28,7 @@ module DriverServices
   private
   def call
     begin
+      ActsAsTenant.current_tenant = @current_user.group
       ActiveRecord::Base.transaction do
         @driver = Driver.find_by(id: @driver_id)
         if @driver.nil?

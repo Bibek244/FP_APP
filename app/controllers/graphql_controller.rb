@@ -6,6 +6,7 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   #  protect_from_forgery with: :null_session
   skip_before_action :verify_authenticity_token
+  # before_action :set_current_tenant
 
   def execute
     variables = prepare_variables(params[:variables])
@@ -13,7 +14,9 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
+      
       current_user: current_user_from_token
+
       # current_group: current_user.group.first || nil
     }
     result = FpAppSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -60,4 +63,6 @@ class GraphqlController < ApplicationController
     decoded_token = JWT.decode token, hmac_secret, true, { algorithm: "HS256" }
     User.find(decoded_token[0]["user_id"])
   end
+
+
 end

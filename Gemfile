@@ -62,3 +62,4 @@ gem "graphql", "~> 2.3", ">= 2.3.14"
 gem "graphiql-rails", group: :development
 gem "jwt", "~> 2.8", ">= 2.8.2"
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
+gem "acts_as_tenant"

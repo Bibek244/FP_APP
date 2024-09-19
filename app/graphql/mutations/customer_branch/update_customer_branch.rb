@@ -6,8 +6,8 @@ class ::Mutations::CustomerBranch::UpdateCustomerBranch < Mutations::BaseMutatio
 
   def resolve(customerbranch_input:, customerbranch_id:)
     authorize
-
-    service = ::CustomerBranchServices::UpdateCustomerBranchService.new(customerbranch_id, customerbranch_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::CustomerBranchServices::UpdateCustomerBranchService.new(customerbranch_id, customerbranch_input.to_h, current_user).execute
 
     if service.success?
       {
