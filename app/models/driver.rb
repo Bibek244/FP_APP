@@ -1,6 +1,5 @@
 class Driver < ApplicationRecord
   belongs_to :group
-  belongs_to :user
 
   enum status: { AVAILABLE: 0, UNAVAILABLE: 1, DEPLOYED: 2 }
   validates :email, presence: true, uniqueness: { scope: :group_id }

@@ -7,7 +7,6 @@ module Types
       argument :phone_no, Integer, required: true
       argument :status, Types::Driver::StatusEnum, required: true
       argument :group_id, ID, required: true
-      argument :user_id, ID, required: true
     end
   end
 end

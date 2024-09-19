@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_16_085430) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_19_080331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,11 +60,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_085430) do
     t.string "address"
     t.integer "status", default: 0, null: false
     t.bigint "group_id", null: false
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_drivers_on_group_id"
-    t.index ["user_id"], name: "index_drivers_on_user_id"
   end
 
   create_table "goods", force: :cascade do |t|
@@ -105,10 +103,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_085430) do
   create_table "order_groups", force: :cascade do |t|
     t.bigint "group_id", null: false
     t.date "planned_at", null: false
-    t.bigint "customer_id", null: false
-    t.bigint "customer_branch_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "customer_id", null: false
+    t.bigint "customer_branch_id", null: false
+    t.boolean "recurring", default: false
+    t.string "recurrence_frequency"
+    t.date "next_due_date"
+    t.date "recurrence_end_date"
     t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
     t.index ["customer_id"], name: "index_order_groups_on_customer_id"
     t.index ["group_id"], name: "index_order_groups_on_group_id"
@@ -150,7 +152,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_085430) do
   add_foreign_key "delivery_orders", "order_groups"
   add_foreign_key "delivery_orders", "vehicles"
   add_foreign_key "drivers", "groups"
-  add_foreign_key "drivers", "users"
   add_foreign_key "line_items", "goods", column: "goods_id"
   add_foreign_key "line_items", "order_groups"
   add_foreign_key "memberships", "groups"
