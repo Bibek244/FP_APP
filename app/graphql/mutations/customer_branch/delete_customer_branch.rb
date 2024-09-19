@@ -1,27 +1,24 @@
 class ::Mutations::CustomerBranch::DeleteCustomerBranch < Mutations::BaseMutation
   argument :customerbranch_id, ID, required: true
 
-  field  :customer_branch, Types::CustomerBranchType, null: true
-  field  :error, [ String ], null: true
-  field :success, Boolean, null: true
-  field :message, String, null: true
+  type Types::CustomerBranch::CustomerBranchResponseType, null: false
 
   def resolve(customerbranch_id:)
-    branch = CustomerBranch.find_by(id: customerbranch_id)
-    if branch.present?
-      CustomerBranch.destroy(branch.id)
+    service = ::CustomerBranchServices::DeleteCustomerBranchServices.new(customerbranch_id).execute
+
+    if service.success?
       {
-        customer_branch: nil,
-        error: [],
-        success: true,
-        message: "Customer Branch is deleted successfully for location #{branch.branch_location}"
+        customerbranch: service.customerbranch,
+        message: "Customer branch deleted Successfully",
+        errors: nil,
+        success: true
       }
     else
       {
-        customer_branch: nil,
-        error: [],
-        success: false,
-        message: "CustomerID is invalid"
+        customerbranch: nil,
+        message: nil,
+        errors: service.errors,
+        success: false
       }
     end
   end

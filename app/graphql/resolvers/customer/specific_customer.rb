@@ -1,5 +1,5 @@
 class ::Resolvers::Customer::SpecificCustomer < Resolvers::BaseResolver
-  type Types::CustomerType, null: true
+  type Types::Customer::CustomerType, null: true
 
   argument :customer_id, ID
 

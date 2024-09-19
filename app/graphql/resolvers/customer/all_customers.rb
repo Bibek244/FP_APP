@@ -1,5 +1,5 @@
 class ::Resolvers::Customer::AllCustomers < Resolvers::BaseResolver
-  type [ Types::CustomerType ], null: true
+  type [ Types::Customer::CustomerType ], null: true
 
   def resolve
     Customer.all
