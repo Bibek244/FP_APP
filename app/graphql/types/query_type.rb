@@ -57,6 +57,8 @@ module Types
     # QUERY FOR DRIVER
     field :driver, resolver: Resolvers::Driver::SpecificDriver, description: "Resolver for Specific Driver "
     field :alldrivers, resolver: Resolvers::Driver::AllDrivers, description: "Resolver for all Driver in an Group "
+    field :status_enum_values, resolver: Resolvers::Vehicles::AllStatus,
+      description: "Retrieve the possible values for the StatusType enum"
 
     # Query FOR ORDER_Group
     field :all_order_group, resolver: Resolvers::OrderGroups::AllOrderGroup,
