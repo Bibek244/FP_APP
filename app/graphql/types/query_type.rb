@@ -57,5 +57,10 @@ module Types
     # QUERY FOR DRIVER
     field :driver, resolver: Resolvers::Driver::SpecificDriver, description: "Resolver for Specific Driver "
     field :alldrivers, resolver: Resolvers::Driver::AllDrivers, description: "Resolver for all Driver in an Group "
+
+    #QUERY FOR DELIVERY Order
+    field :deliveryorder, resolver: Resolvers::DeliveryOrder::SpecificDeliveryOrder, description: "Resolver for Specific Delivery Order"
+    field :alldeliveryorder, resolver: Resolvers::DeliveryOrder::AllDeliveryOrder, description: "Resolver for All Delivery Order of a group"
+
   end
 end
