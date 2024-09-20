@@ -6,7 +6,7 @@ module Types
       argument :address, String, required: true
       argument :phone_no, Integer, required: true
       argument :status, Types::Driver::StatusEnum, required: true
-      # argument :group_id, ID, required: true
+      argument :group_id, ID, required: true
     end
   end
 end

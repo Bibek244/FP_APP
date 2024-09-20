@@ -1,6 +1,5 @@
 class Driver < ApplicationRecord
-  # belongs_to :group
-  acts_as_tenant(:group)
+  belongs_to :group
 
   enum status: { AVAILABLE: 0, UNAVAILABLE: 1, DEPLOYED: 2 }
   validates :email, presence: true, uniqueness: { scope: :group_id }

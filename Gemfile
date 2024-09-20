@@ -62,4 +62,6 @@ gem "graphql", "~> 2.3", ">= 2.3.14"
 gem "graphiql-rails", group: :development
 gem "jwt", "~> 2.8", ">= 2.8.2"
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
+gem "sidekiq", "~> 7.3", ">= 7.3.2"
+gem "sidekiq-scheduler", "~> 5.0", ">= 5.0.6"
 gem "acts_as_tenant"
