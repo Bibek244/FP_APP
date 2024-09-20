@@ -5,6 +5,7 @@ class ::Mutations::Customer::UpdateCustomer < Mutations::BaseMutation
   type Types::Customer::CustomerResultType, null: true
 
   def resolve(customer_input:, customer_id:)
+    authorize
     service = ::CustomerServices::UpdateCustomerServices.new(customer_id, customer_input.to_h).execute
 
     if service.success?

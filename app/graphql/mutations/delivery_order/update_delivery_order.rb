@@ -6,6 +6,8 @@ class ::Mutations::DeliveryOrder::UpdateDeliveryOrder < Mutations::BaseMutation
   type Types::DeliveryOrder::DeliveryResponseType, null: true
 
   def resolve(deliveryorder_input:, deliveryorder_id:)
+    authorize
+
     service = ::DeliveryOrderServices::UpdateDeliveryOrderService.new(deliveryorder_id, deliveryorder_input.to_h).execute
     if service.success?
       {

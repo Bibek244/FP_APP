@@ -5,6 +5,8 @@ class ::Mutations::CustomerBranch::UpdateCustomerBranch < Mutations::BaseMutatio
   type Types::CustomerBranch::CustomerBranchResponseType, null: true
 
   def resolve(customerbranch_input:, customerbranch_id:)
+    authorize
+
     service = ::CustomerBranchServices::UpdateCustomerBranchService.new(customerbranch_id, customerbranch_input.to_h).execute
 
     if service.success?

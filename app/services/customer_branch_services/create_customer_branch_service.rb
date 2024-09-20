@@ -12,6 +12,7 @@ module CustomerBranchServices
     end
 
     def execute
+      # @user = context[:current_user]
       call
       self
     end

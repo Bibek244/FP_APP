@@ -2,6 +2,8 @@ class Resolvers::Vehicles::AllVehicles < Resolvers::BaseResolver
   type Types::Vehicles::VehiclesResultType, null: true
 
   def resolve
+    authorize
+
    vehicles =  Vehicle.all
    if vehicles.nil?
      { vehicle: nil, message: "No vehicles found.", errors: [] }

@@ -5,6 +5,7 @@ class ::Mutations::Goods::UpdateGoods < Mutations::BaseMutation
   type Types::Goods::GoodsResultType, null: false
 
   def resolve(goods_input:, goods_id:)
+    authorize
     service = ::GoodsServices::UpdateGoodsServices.new(goods_id, goods_input.to_h).execute
 
     if service.success?

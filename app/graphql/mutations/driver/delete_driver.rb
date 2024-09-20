@@ -4,6 +4,7 @@ class ::Mutations::Driver::DeleteDriver < Mutations::BaseMutation
   type Types::Driver::DriverResultType, null: true
 
   def resolve(driver_id:)
+    authorize
     service = ::DriverServices::DeleteDriverServices.new(driver_id).execute
 
     if service.success?
