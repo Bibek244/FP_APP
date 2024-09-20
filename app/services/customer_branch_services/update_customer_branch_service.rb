@@ -3,9 +3,10 @@ module CustomerBranchServices
     attr_accessor :errors, :message, :success, :customerbranch
     attr_reader :customerbranch_input
 
-    def initialize(customerbranch_id, customerbranch_input = {})
+    def initialize(customerbranch_id, customerbranch_input = {}, current_user)
       @customerbranch_input = customerbranch_input
       @customerbranch_id = customerbranch_id
+      @current_user = current_user
       @success = false
       @errors = []
       @message = ""
@@ -28,6 +29,7 @@ module CustomerBranchServices
     private
     def call
       begin
+        ActsAsTenant.current_tenant = @current_user.group
         ActiveRecord::Base.transaction do
           @customerbranch = CustomerBranch.find_by(id: @customerbranch_id)
           if @customerbranch.nil?

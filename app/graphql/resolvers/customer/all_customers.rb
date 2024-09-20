@@ -3,7 +3,8 @@ class ::Resolvers::Customer::AllCustomers < Resolvers::BaseResolver
 
   def resolve
     authorize
-
-    Customer.all
+    current_user = context[:current_user]
+    ActsAsTenant.current_tenant = current_user.group
+    Customer.all.order(created_at: :desc)
   end
 end

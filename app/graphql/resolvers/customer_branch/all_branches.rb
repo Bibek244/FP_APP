@@ -5,7 +5,8 @@ class ::Resolvers::CustomerBranch::AllBranches < Resolvers::BaseResolver
 
   def resolve(customer_id:)
     authorize
-
-    CustomerBranch.where(customer_id: customer_id)
+    current_user = context[:current_user]
+    ActsAsTenant.current_tenant = current_user.group
+    ::CustomerBranch.where(customer_id: customer_id).order(created_at: :desc)
   end
 end

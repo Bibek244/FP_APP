@@ -3,16 +3,16 @@ module CustomerBranchServices
     attr_accessor :errors, :success, :customerbranch
     attr_reader :customerbranch_input
 
-    def initialize(customerbranch_input = {})
+    def initialize(customerbranch_input = {}, current_user = {})
       @customerbranch_input = customerbranch_input
+      @current_user = current_user
       @success = false
       @errors = []
       @message = ""
-      @customer = nil
+      @customerbranch = nil
     end
 
     def execute
-      # @user = context[:current_user]
       call
       self
     end
@@ -28,8 +28,9 @@ module CustomerBranchServices
   private
     def call
       begin
+        ActsAsTenant.current_tenant = @current_user.group
         ActiveRecord::Base.transaction do
-          @customerbranch = CustomerBranch.create!(@customerbranch_input.to_h)
+          @customerbranch = CustomerBranch.create!(@customerbranch_input.to_h.merge(group_id: @current_user.group_id))
           @success = true
           @errors = []
           @message = ""

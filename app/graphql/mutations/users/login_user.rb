@@ -13,8 +13,6 @@ module Mutations
       field :token, String, null: true
 
       def resolve(email:, password:, group_id:)
-        # user ={email: email, password: password, group_id: group_id}
-        # service = Users::UserSessionService.new(user)
         group = Group.find_by(id: group_id)
 
         # debugger

@@ -5,6 +5,8 @@ class Resolvers::Goods::SpecificGoods < Resolvers::BaseResolver
 
   def resolve(goods_id:)
     authorize
+    current_user = context[:current_user]
+    ActsAsTenant.current_tenant = current_user.group
 
     goods = Goods.where(id: goods_id)
     if goods.present?

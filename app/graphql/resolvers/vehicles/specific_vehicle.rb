@@ -5,6 +5,8 @@ class Resolvers::Vehicles::SpecificVehicle < Resolvers::BaseResolver
 
   def resolve(vehicle_id:)
     authorize
+    current_user = context[:current_user]
+    ActsAsTenant.current_tenant = current_user.group
 
     vehicle = Vehicle.where(id: vehicle_id)
     if vehicle.present?
