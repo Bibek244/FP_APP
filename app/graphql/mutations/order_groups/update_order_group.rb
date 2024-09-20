@@ -6,7 +6,6 @@ class Mutations::OrderGroups::UpdateOrderGroup < Mutations::BaseMutation
 
   type Types::OrderGroups::OrderGroupResultType, null: false
     def resolve(order_group_id:, update_order:)
-      binding.irb
       service = ::OrderGroupServices::UpdateOrderGroup.new(order_group_id, update_order.to_h).execute
 
       if service.success?

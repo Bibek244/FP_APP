@@ -18,7 +18,6 @@ module OrderGroupServices
     end
 
     def execute
-      binding.irb
       call
       self
     end
@@ -26,7 +25,6 @@ module OrderGroupServices
     private
 
     def call
-      binding.irb
       ActiveRecord::Base.transaction do
         @order_group = OrderGroup.find_by(id: @delete_order)
         unless @order_group

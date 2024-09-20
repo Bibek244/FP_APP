@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.integer "phone_no"
     t.string "address"
     t.integer "status", default: 0, null: false
+    t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id", null: false
@@ -109,10 +110,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
   create_table "order_groups", force: :cascade do |t|
     t.bigint "group_id", null: false
     t.date "planned_at", null: false
-    t.bigint "customer_id", null: false
-    t.bigint "customer_branch_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "customer_id", null: false
+    t.bigint "customer_branch_id", null: false
+    t.boolean "recurring", default: false
+    t.string "recurrence_frequency"
+    t.date "next_due_date"
+    t.date "recurrence_end_date"
     t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
     t.index ["customer_id"], name: "index_order_groups_on_customer_id"
     t.index ["group_id"], name: "index_order_groups_on_group_id"
