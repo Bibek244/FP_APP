@@ -31,6 +31,9 @@ module OrderGroupServices
           @errors << "Order Group doesnot exist."
           raise ActiveRecord::Rollback
         else
+          if @order_group.parent_order_group.nil?
+            delete_child_order_group(@order_group)
+          end
           @order_group.destroy!
           @success = true
           @errors = []
@@ -42,6 +45,16 @@ module OrderGroupServices
     rescue => err
       @success = false
       @errors << err.message
+    end
+
+    def delete_child_order_group(order_group)
+      order_group.child_order_groups.each do |child_order_group|
+        delivery_order = child_order_group.delivery_order
+        if delivery_order&.status == "pending"
+          delivery_order.destroy
+          child_order_group.destroy
+        end
+      end
     end
   end
 end
