@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_19_080331) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,9 +111,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_080331) do
     t.string "recurrence_frequency"
     t.date "next_due_date"
     t.date "recurrence_end_date"
+    t.integer "parent_order_group_id"
+    t.boolean "skip_update", default: false
     t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
     t.index ["customer_id"], name: "index_order_groups_on_customer_id"
     t.index ["group_id"], name: "index_order_groups_on_group_id"
+    t.index ["parent_order_group_id"], name: "index_order_groups_on_parent_order_group_id"
   end
 
   create_table "users", force: :cascade do |t|
