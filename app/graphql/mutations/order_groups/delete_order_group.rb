@@ -4,7 +4,9 @@ class Mutations::OrderGroups::DeleteOrderGroup < Mutations::BaseMutation
   type Types::OrderGroups::OrderGroupResultType, null: false
 
   def resolve(order_id:)
-   service = ::OrderGroupServices::DeleteOrderGroup.new(order_id).execute
+    authorize
+    current_user = context[:current_user]
+   service = ::OrderGroupServices::DeleteOrderGroup.new(order_id, current_user).execute
 
    if service.success
     { order: service.order_group, message: "Successfully deleted the order group.", errors: [] }

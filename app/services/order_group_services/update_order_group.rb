@@ -3,9 +3,10 @@ module OrderGroupServices
     attr_accessor :success, :errors
     attr_reader :order_group
 
-    def initialize(order_group_id, update_order)
+    def initialize(order_group_id, update_order, current_user)
       @order_group_id = order_group_id
       @update_order = update_order
+      @current_user = current_user
       @success = false
       @errors = []
     end
@@ -27,6 +28,8 @@ module OrderGroupServices
 
     def call
       ActiveRecord::Base.transaction do
+        ActsAsTenant.current_tenant = @current_user.group
+
         customer_branch = CustomerBranch.find_by(id: @update_order[:customer_branch_id])
         unless customer_branch
           @errors << "CustomerBranch was not found"
@@ -70,10 +73,10 @@ module OrderGroupServices
       end
       update_attributes = {}
 
-      update_attributes[:group_id] = @update_order[:group_id] if @update_order[:group_id].present?
-      update_attributes[:planned_at] = @update_order[:planned_at] if @update_order[:planned_at].present?
-      update_attributes[:customer_id] = customer.id if customer.present?
-      update_attributes[:customer_branch_id] = customer_branch.id if customer_branch.present?
+      update_attributes[:group_id] =  @current_user.group_id
+      update_attributes[:planned_at] = @update_order[:planned_at]
+      update_attributes[:customer_id] = customer.id
+      update_attributes[:customer_branch_id] = customer_branch.id
 
       order_group.update!(update_attributes)
 
@@ -85,9 +88,9 @@ module OrderGroupServices
         next if child_order_group.skip_update
         update_attributes = {}
 
-        update_attributes[:planned_at] = @update_order[:planned_at] if @update_order[:planned_at].present?
-        update_attributes[:customer_id] = parent_order_group.customer_id if @update_order[:customer_branch_id].present?
-        update_attributes[:customer_branch_id] = parent_order_group.customer_branch_id if @update_order[:customer_branch_id].present?
+        update_attributes[:planned_at] = @update_order[:planned_at]
+        update_attributes[:customer_id] = parent_order_group.customer_id
+        update_attributes[:customer_branch_id] = parent_order_group.customer_branch_id
 
         child_order_group.update!(update_attributes)
         update_line_items(child_order_group)
