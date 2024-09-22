@@ -5,8 +5,8 @@ class Mutations::Vehicles::DeleteVehicle < Mutations::BaseMutation
 
   def resolve(vehicle_id:)
     authorize
-
-    service = ::VehiclesServices::DeleteVehiclesServices.new(vehicle_id).execute
+    current_user = context[:current_user]
+    service = ::VehiclesServices::DeleteVehiclesServices.new(vehicle_id, current_user).execute
 
     if service.success?
       { vehicle: [ service.vehicle ], message: "Successfully deleted vehicle.", errors: [] }

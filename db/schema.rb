@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,7 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
     t.bigint "customer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false
     t.index ["customer_id"], name: "index_customer_branches_on_customer_id"
+    t.index ["group_id"], name: "index_customer_branches_on_group_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -30,7 +32,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["group_id"], name: "index_customers_on_group_id"
+    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "delivery_orders", force: :cascade do |t|
@@ -62,6 +66,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false
     t.index ["group_id"], name: "index_drivers_on_group_id"
   end
 
@@ -73,6 +78,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
     t.integer "availability"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id"], name: "index_goods_on_group_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -128,7 +135,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "jti"
+    t.bigint "group_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["group_id"], name: "index_users_on_group_id"
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -147,7 +156,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
   end
 
   add_foreign_key "customer_branches", "customers"
+  add_foreign_key "customer_branches", "groups"
   add_foreign_key "customers", "groups"
+  add_foreign_key "customers", "users"
   add_foreign_key "delivery_orders", "customer_branches"
   add_foreign_key "delivery_orders", "customers"
   add_foreign_key "delivery_orders", "drivers"
@@ -155,6 +166,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
   add_foreign_key "delivery_orders", "order_groups"
   add_foreign_key "delivery_orders", "vehicles"
   add_foreign_key "drivers", "groups"
+  add_foreign_key "goods", "groups"
   add_foreign_key "line_items", "goods", column: "goods_id"
   add_foreign_key "line_items", "order_groups"
   add_foreign_key "memberships", "groups"
@@ -162,5 +174,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_180718) do
   add_foreign_key "order_groups", "customer_branches"
   add_foreign_key "order_groups", "customers"
   add_foreign_key "order_groups", "groups"
+  add_foreign_key "users", "groups"
   add_foreign_key "vehicles", "groups"
 end

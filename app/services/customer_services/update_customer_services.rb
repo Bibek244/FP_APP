@@ -3,9 +3,10 @@
       attr_accessor :errors, :message, :success, :customer
       attr_reader :customer_input
 
-      def initialize(customer_id, customer_input = {})
+      def initialize(customer_id, customer_input = {}, current_user)
         @customer_input = customer_input
         @customer_id = customer_id
+        @current_user = current_user
         @success = false
         @errors = []
         @message = ""
@@ -28,6 +29,7 @@
       private
       def call
         begin
+          ActsAsTenant.current_tenant = @current_user.group
           ActiveRecord::Base.transaction do
             @customer = Customer.find_by(id: @customer_id)
             if @customer.nil?

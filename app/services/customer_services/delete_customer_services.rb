@@ -3,8 +3,9 @@ module CustomerServices
     attr_accessor :errors, :success, :customer, :message
     attr_reader :customer_id
 
-    def initialize(customer_id)
+    def initialize(customer_id, current_user = {})
       @customer_id = customer_id
+      @current_user = current_user
       @success = false
       @errors = []
       @message = ""
@@ -27,6 +28,7 @@ module CustomerServices
     private
     def call
       begin
+        ActsAsTenant.current_tenant = @current_user.group
         ActiveRecord::Base.transaction do
           @customer = Customer.find_by(id: @customer_id)
           if @customer.nil?

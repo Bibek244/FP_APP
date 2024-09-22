@@ -5,9 +5,9 @@ class ::Mutations::CustomerBranch::AddCustomerBranch < Mutations::BaseMutation
 
   def resolve(customerbranch_input:)
     authorize
-
-    service = CustomerBranchServices::CreateCustomerBranchService.new(customerbranch_input.to_h).execute
-
+    current_user = context[:current_user]
+    service = CustomerBranchServices::CreateCustomerBranchService.new(customerbranch_input.to_h, current_user).execute
+    
     if service.success?
       {
         customerbranch: service.customerbranch,
@@ -20,7 +20,7 @@ class ::Mutations::CustomerBranch::AddCustomerBranch < Mutations::BaseMutation
         customerbranch: nil,
         message: nil,
         success: false,
-        errors:  service.errors
+        errors: [service.errors]
       }
     end
   end

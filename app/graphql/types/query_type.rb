@@ -29,6 +29,10 @@ module Types
       description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
+    field :all_category, resolver: Resolvers::Goods::AllCategory,
+      description: "Resolver to get all the category"
+    field :sold_as, resolver: Resolvers::Goods::SoldAs,
+      description: "Resolver to get all the selling category"
 
     # QUERY FOR GROUPS
     field :all_groups, resolver: Resolvers::Groups::AllGroups,

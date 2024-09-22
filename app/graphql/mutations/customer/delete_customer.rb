@@ -5,7 +5,8 @@ class ::Mutations::Customer::DeleteCustomer < Mutations::BaseMutation
 
   def resolve(customer_id:)
     authorize
-    service = ::CustomerServices::DeleteCustomerServices.new(customer_id).execute
+    current_user = context[:current_user]
+    service = ::CustomerServices::DeleteCustomerServices.new(customer_id, current_user).execute
 
     if service.success?
       {

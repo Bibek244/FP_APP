@@ -5,7 +5,8 @@ class ::Mutations::Driver::DeleteDriver < Mutations::BaseMutation
 
   def resolve(driver_id:)
     authorize
-    service = ::DriverServices::DeleteDriverServices.new(driver_id).execute
+    current_user = context[:current_user]
+    service = ::DriverServices::DeleteDriverServices.new(driver_id, current_user).execute
 
     if service.success?
       {

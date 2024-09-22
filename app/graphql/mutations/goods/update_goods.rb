@@ -6,7 +6,8 @@ class ::Mutations::Goods::UpdateGoods < Mutations::BaseMutation
 
   def resolve(goods_input:, goods_id:)
     authorize
-    service = ::GoodsServices::UpdateGoodsServices.new(goods_id, goods_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::GoodsServices::UpdateGoodsServices.new(goods_id, goods_input.to_h, current_user).execute
 
     if service.success?
 

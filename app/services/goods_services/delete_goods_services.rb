@@ -4,8 +4,9 @@ module GoodsServices
     attr_accessor :errors, :success, :goods
     attr_reader :goods_input
 
-    def initialize(goods_id)
-      @goods_id = goods_id[:goods_id]
+    def initialize(goods_id, current_user)
+      @goods_id = goods_id
+      @current_user = current_user
       @success = false
       @errors = []
       @goods = nil
@@ -26,8 +27,12 @@ module GoodsServices
 
   private
     def call
+      ActsAsTenant.current_tenant = @current_user.group
       ActiveRecord::Base.transaction do
         @goods = Goods.find_by(id: @goods_id)
+        if @goods.nil?
+          raise ActiveRecord::RecordNotFound,"Product not found"
+        end
         @goods.destroy
         @success = true
         @errors = []
