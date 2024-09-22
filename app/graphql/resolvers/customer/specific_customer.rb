@@ -4,6 +4,8 @@ class ::Resolvers::Customer::SpecificCustomer < Resolvers::BaseResolver
   argument :customer_id, ID
 
   def resolve(customer_id:)
+    authorize
+
     ::Customer.find_by(id: customer_id)
   end
 end

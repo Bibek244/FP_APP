@@ -4,6 +4,8 @@ class ::Mutations::Vehicles::CreateVehicle < ::Mutations::BaseMutation
   type Types::Vehicles::VehiclesResultType, null: false
 
   def resolve(vehicle_input:)
+    authorize
+
     service = ::VehiclesServices::CreateVehiclesServices.new(vehicle_input.to_h).execute
 
     if service.success?

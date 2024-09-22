@@ -4,6 +4,8 @@ class Resolvers::Vehicles::SpecificVehicle < Resolvers::BaseResolver
   type Types::Vehicles::VehiclesResultType, null: true
 
   def resolve(vehicle_id:)
+    authorize
+
     vehicle = Vehicle.where(id: vehicle_id)
     if vehicle.present?
       { vehicle: vehicle, message: "Successfully fetched the vehicle.", errors: [] }

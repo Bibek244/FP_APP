@@ -5,6 +5,8 @@ class ::Resolvers::Driver::SpecificDriver < Resolvers::BaseResolver
   type Types::Driver::DriverType, null: true
 
   def resolve(driver_id:)
+    authorize
+
     driver = ::Driver.find_by(id: driver_id)
     if driver.nil?
       raise GraphQL::ExecutionError, "Driver with ID #{driver_id} not found"

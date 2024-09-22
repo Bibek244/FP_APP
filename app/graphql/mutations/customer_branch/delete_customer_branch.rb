@@ -4,6 +4,8 @@ class ::Mutations::CustomerBranch::DeleteCustomerBranch < Mutations::BaseMutatio
   type Types::CustomerBranch::CustomerBranchResponseType, null: false
 
   def resolve(customerbranch_id:)
+    authorize
+
     service = ::CustomerBranchServices::DeleteCustomerBranchServices.new(customerbranch_id).execute
 
     if service.success?

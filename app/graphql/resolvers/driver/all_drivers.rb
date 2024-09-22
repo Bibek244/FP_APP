@@ -3,6 +3,8 @@ class ::Resolvers::Driver::AllDrivers < Resolvers::BaseResolver
 
   argument :group_id, ID, required: true
   def resolve(group_id:)
+    authorize
+
     Driver.where(group_id: group_id)
   end
 end

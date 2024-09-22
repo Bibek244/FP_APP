@@ -4,6 +4,7 @@ class ::Mutations::Customer::DeleteCustomer < Mutations::BaseMutation
   type Types::Customer::CustomerResultType, null: false
 
   def resolve(customer_id:)
+    authorize
     service = ::CustomerServices::DeleteCustomerServices.new(customer_id).execute
 
     if service.success?

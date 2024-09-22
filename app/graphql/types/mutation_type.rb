@@ -10,6 +10,7 @@ module Types
     # LOGIN AND REGISTRAGTION MUTATIONS
     field :register_user, mutation: Mutations::Users::RegisterUser
     field :login_user, mutation: Mutations::Users::LoginUser
+    field :logout_user, mutation: Mutations::Users::LogoutUser
 
     # CUSTOMER MUTATIONS
     field :create_customer, mutation: Mutations::Customer::CreateCustomer

@@ -1,6 +1,6 @@
 
 module CustomerServices
-  class CreateCustomerServices
+  class CreateCustomerService
     attr_accessor :errors, :success, :customer
     attr_reader :customer_input
 

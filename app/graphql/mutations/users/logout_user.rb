@@ -3,8 +3,9 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
   field :error, [ String ], null: true
   field :message, String, null: true
 
+  
   def resolve
-    user = context[:current_user]
+    authorize
     if user
       if user.jti == nil
         {
@@ -22,7 +23,7 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
         else
           {
             success: false,
-            error: user.errors.full_messages,
+            error: [ user.errors.full_messages ],
             message: "Logout Unsucessfull"
           }
         end
@@ -30,9 +31,16 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
     else
       {
         success: false,
-        error: "",
+        error: [],
         message: "No user Found"
       }
     end
   end
+  
+  private
+
+  def user
+    context[:current_user] # access the user in the context
+  end
+
 end

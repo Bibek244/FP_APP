@@ -4,6 +4,8 @@ class Mutations::Vehicles::DeleteVehicle < Mutations::BaseMutation
   type Types::Vehicles::VehiclesResultType, null: false
 
   def resolve(vehicle_id:)
+    authorize
+
     service = ::VehiclesServices::DeleteVehiclesServices.new(vehicle_id).execute
 
     if service.success?
