@@ -29,7 +29,15 @@
       def call
         ActsAsTenant.current_tenant = @current_user.group
         ActiveRecord::Base.transaction do
-          @goods = Goods.create!(@goods_input.to_h.merge(group_id: @current_user.group_id))
+          category = Category.find_by(id: @goods_input[:category_id])
+
+          if category.nil?
+            raise ActiveRecord::RecordInvalid.new(Goods.new), "Category not found"
+          end
+          @goods = Goods.create!(@goods_input.to_h.except(:category_id).merge(
+            category: category,
+            group_id: @current_user.group_id
+          ))
           @success = true
           @errors = []
         end

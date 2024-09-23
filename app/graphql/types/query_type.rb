@@ -29,8 +29,6 @@ module Types
       description: "Resolver to get all goods"
     field :specific_goods, resolver: Resolvers::Goods::SpecificGoods,
      description: "Resolver to get specific goods"
-    field :all_category, resolver: Resolvers::Goods::AllCategory,
-      description: "Resolver to get all the category"
     field :sold_as, resolver: Resolvers::Goods::SoldAs,
       description: "Resolver to get all the selling category"
 
@@ -62,7 +60,7 @@ module Types
     field :driver, resolver: Resolvers::Driver::SpecificDriver, description: "Resolver for Specific Driver "
     field :alldrivers, resolver: Resolvers::Driver::AllDrivers, description: "Resolver for all Driver in an Group "
 
-    #QUERY FOR DELIVERY Order
+    # QUERY FOR DELIVERY Order
     field :deliveryorder, resolver: Resolvers::DeliveryOrder::SpecificDeliveryOrder, description: "Resolver for Specific Delivery Order"
     field :alldeliveryorder, resolver: Resolvers::DeliveryOrder::AllDeliveryOrder, description: "Resolver for All Delivery Order of a group"
 
@@ -75,6 +73,13 @@ module Types
       description: "Resolver to fetch all order_groups"
     field :specific_order_group, resolver: Resolvers::OrderGroups::SpecificOrderGroup,
       description: "Resolver to fetch specific order group"
+    field :unit, resolver: Resolvers::OrderGroups::UnitResolver,
+      description: "Resolver to fetch unit."
 
+    # QUERY FOR CATEGORY
+    field :all_category, resolver: Resolvers::Category::AllCategory,
+      description: "Resolver to fetch all categories"
+    field :specific_category, resolver: Resolvers::Category::SpecificCategory,
+      description: "Resovler to fetch specific order_group"
   end
 end
