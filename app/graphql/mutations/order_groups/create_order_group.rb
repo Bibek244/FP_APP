@@ -5,7 +5,9 @@ argument :create_order, Types::OrderGroups::OrderGroupInputType, required: true
 
 type Types::OrderGroups::OrderGroupResultType, null: false
   def resolve(create_order:)
-    service = ::OrderGroupServices::CreateOrderGroup.new(create_order.to_h).execute
+    authorize
+    current_user = context[:current_user]
+    service = ::OrderGroupServices::CreateOrderGroup.new(create_order.to_h, current_user).execute
 
     if service.success?
       { order: service.order_group, line_items: service.order_group.line_items, message: "successfully created a order.", errors: [] }

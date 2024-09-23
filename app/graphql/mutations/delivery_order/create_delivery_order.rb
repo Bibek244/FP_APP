@@ -1,26 +1,25 @@
 class ::Mutations::DeliveryOrder::CreateDeliveryOrder < Mutations::BaseMutation
   argument :deliveryorder_input, Types::DeliveryOrder::DeliveryOrderInputType, required: true
-  
-  type Types::DeliveryOrder::DeliveryResponseType, null: true
-  
-  def resolve(deliveryorder_input:)
-    authorize
 
-    service = ::DeliveryOrderServices::CreateDeliveryOrderService.new(deliveryorder_input.to_h).execute
-    
+  type Types::DeliveryOrder::DeliveryResponseType, null: true
+
+  def resolve(delivery_order_input:)
+    authorize
+    current_user = context[:current_user]
+
+    service = ::DeliveryOrderServices::CreateDeliveryOrderService.new(delivery_order_input.to_h, current_user).execute
+
     if service.success?
       {
-        deliveryorder: service.deliveryorder,
+        deliveryorder: service.delivery_order,
         message: "Successfully created new Delivery Order.",
-        success: true,
         errors: []
       }
     else
       {
         deliveryorder: nil,
         message: nil,
-        success: false,
-        errors: [service.errors]
+        errors: [ service.errors ]
       }
     end
   end

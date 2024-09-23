@@ -1,6 +1,6 @@
 class DeliveryOrder < ApplicationRecord
+  acts_as_tenant(:group)
   belongs_to :customer_branch
-  belongs_to :group
   belongs_to :order_group
   belongs_to :vehicle
   belongs_to :driver
