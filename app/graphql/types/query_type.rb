@@ -73,6 +73,8 @@ module Types
       description: "Resolver to fetch all order_groups"
     field :specific_order_group, resolver: Resolvers::OrderGroups::SpecificOrderGroup,
       description: "Resolver to fetch specific order group"
+    field :unit, resolver: Resolvers::OrderGroups::UnitResolver,
+      description: "Resolver to fetch unit."
 
     # QUERY FOR CATEGORY
     field :all_category, resolver: Resolvers::Category::AllCategory,
