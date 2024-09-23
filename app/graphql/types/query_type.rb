@@ -31,6 +31,8 @@ module Types
      description: "Resolver to get specific goods"
     field :sold_as, resolver: Resolvers::Goods::SoldAs,
       description: "Resolver to get all the selling category"
+    field :availibility, resolver: Resolvers::Goods::AvailabilityResolver,
+      description: "Resovler for availibility enum"
 
     # QUERY FOR GROUPS
     field :all_groups, resolver: Resolvers::Groups::AllGroups,
