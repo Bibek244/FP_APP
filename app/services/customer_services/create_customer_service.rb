@@ -29,15 +29,15 @@ module CustomerServices
   private
     def call
       begin
-        ActsAsTenant.current_tenant = current_user.group 
-        @customer = Customer.new(@customer_input.merge(user_id: current_user.id, group_id: current_user.group_id))
+        ActsAsTenant.current_tenant = current_user.group
+        @customer = Customer.new(@customer_input.merge(group_id: current_user.group_id))
         if @customer.save!
           @success = true
           @errors = []
           @message = ""
         else
           @success = false
-          @error = ["Cannot create new customer"]
+          @error = [ "Cannot create new customer" ]
           @message = ""
         end
       rescue ActiveRecord::RecordInvalid => err

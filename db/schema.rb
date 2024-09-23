@@ -32,9 +32,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.index ["group_id"], name: "index_customers_on_group_id"
-    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "delivery_orders", force: :cascade do |t|
@@ -63,7 +61,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.integer "phone_no"
     t.string "address"
     t.integer "status", default: 0, null: false
-    t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id", null: false
@@ -110,10 +107,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
   create_table "order_groups", force: :cascade do |t|
     t.bigint "group_id", null: false
     t.date "planned_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "customer_id", null: false
     t.bigint "customer_branch_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "recurring", default: false
     t.string "recurrence_frequency"
     t.date "next_due_date"
@@ -155,7 +152,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
   add_foreign_key "customer_branches", "customers"
   add_foreign_key "customer_branches", "groups"
   add_foreign_key "customers", "groups"
-  add_foreign_key "customers", "users"
   add_foreign_key "delivery_orders", "customer_branches"
   add_foreign_key "delivery_orders", "customers"
   add_foreign_key "delivery_orders", "drivers"

@@ -13,13 +13,13 @@ module DeliveryOrderServices
 
     def execute
       call
-      self 
+      self
     end
 
     def success?
       @success
     end
-    
+
     def errros
       @errros.join(", ")
     end
@@ -28,7 +28,7 @@ module DeliveryOrderServices
     def call
       begin
         ActiveRecord::Base.transaction do
-          @deliveryorder = DeliveryOrder.create!(@deliveryorder_input.to_h)
+          @deliveryorder = DeliveryOrder.create!(@deliveryorder_input.to_h.except(:status).merge(status: "pending"))
           @success = true
           @errors = []
           @message = ""
