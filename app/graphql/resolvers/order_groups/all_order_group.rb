@@ -9,11 +9,17 @@ class Resolvers::OrderGroups::AllOrderGroup < Resolvers::BaseResolver
 
     if order_groups.present?
       order_groups_result = order_groups.map do |order_group|
+        if order_group.parent_order_group_id.nil?
+          child_order_groups = order_group.child_order_groups
+        else
+          child_order_groups = []
+        end
         {
           order: order_group,
           line_items: order_group.line_items,
           customer: order_group.customer,
           customer_branch: order_group.customer_branch,
+          child_order_groups: child_order_groups,
           message: "Successfully fetched the order group.",
           errors: []
         }
