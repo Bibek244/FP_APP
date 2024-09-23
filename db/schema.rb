@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_22_185713) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_23_042717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id"], name: "index_categories_on_group_id"
+  end
 
   create_table "customer_branches", force: :cascade do |t|
     t.string "branch_location"
@@ -69,13 +77,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_185713) do
 
   create_table "goods", force: :cascade do |t|
     t.string "name"
-    t.string "category"
     t.string "sold_as"
     t.string "unit"
     t.integer "availability"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_goods_on_category_id"
     t.index ["group_id"], name: "index_goods_on_group_id"
   end
 
@@ -153,6 +162,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_185713) do
     t.index ["group_id"], name: "index_vehicles_on_group_id"
   end
 
+  add_foreign_key "categories", "groups"
   add_foreign_key "customer_branches", "customers"
   add_foreign_key "customer_branches", "groups"
   add_foreign_key "customers", "groups"
@@ -163,6 +173,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_185713) do
   add_foreign_key "delivery_orders", "order_groups"
   add_foreign_key "delivery_orders", "vehicles"
   add_foreign_key "drivers", "groups"
+  add_foreign_key "goods", "categories"
   add_foreign_key "goods", "groups"
   add_foreign_key "line_items", "goods", column: "goods_id"
   add_foreign_key "line_items", "order_groups"

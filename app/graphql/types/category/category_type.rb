@@ -1,14 +1,13 @@
+# frozen_string_literal: true
+
 module Types
-  module Goods
-    class GoodsType < Types::BaseObject
+  module Category
+    class CategoryType < Types::BaseObject
       field :id, ID, null: false
       field :name, String
-      field :category, Types::Category::CategoryType
-      field :sold_as, String
-      field :unit, String
-      field :availability, AvailabilityType
       field :created_at, GraphQL::Types::ISO8601DateTime, null: false
       field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+      field :group_id, Integer, null: false
     end
   end
 end

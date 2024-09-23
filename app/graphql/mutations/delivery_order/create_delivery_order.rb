@@ -1,5 +1,5 @@
 class ::Mutations::DeliveryOrder::CreateDeliveryOrder < Mutations::BaseMutation
-  argument :deliveryorder_input, Types::DeliveryOrder::DeliveryOrderInputType, required: true
+  argument :delivery_order_input, Types::DeliveryOrder::DeliveryOrderInputType, required: true
 
   type Types::DeliveryOrder::DeliveryResponseType, null: true
 
