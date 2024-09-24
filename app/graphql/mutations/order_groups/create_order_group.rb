@@ -10,7 +10,7 @@ type Types::OrderGroups::OrderGroupResultType, null: false
     service = ::OrderGroupServices::CreateOrderGroup.new(create_order.to_h, current_user).execute
 
     if service.success?
-      { order: service.order_group, line_items: service.order_group.line_items, message: "successfully created a order.", errors: [] }
+      { order: service.order_group, message: "successfully created a order.", errors: [] }
     else
       { order: nil, line_items: nil, message: "Failed to created a order.", errors: [ service.errors ] }
     end

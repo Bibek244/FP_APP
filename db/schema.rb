@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_23_042717) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_042424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,10 +99,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_042717) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "order_group_id", null: false
     t.integer "unit"
+    t.bigint "delivery_order_id", null: false
+    t.index ["delivery_order_id"], name: "index_line_items_on_delivery_order_id"
     t.index ["goods_id"], name: "index_line_items_on_goods_id"
-    t.index ["order_group_id"], name: "index_line_items_on_order_group_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -175,8 +175,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_042717) do
   add_foreign_key "drivers", "groups"
   add_foreign_key "goods", "categories"
   add_foreign_key "goods", "groups"
+  add_foreign_key "line_items", "delivery_orders"
   add_foreign_key "line_items", "goods", column: "goods_id"
-  add_foreign_key "line_items", "order_groups"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "order_groups", "customer_branches"

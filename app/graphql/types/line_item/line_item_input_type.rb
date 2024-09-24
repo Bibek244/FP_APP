@@ -1,5 +1,5 @@
 module Types
-  module OrderGroups
+  module LineItem
     class LineItemInputType < Types::BaseInputObject
       argument :id, ID, required: false
       argument :goods_id, ID, required: true

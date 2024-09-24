@@ -37,6 +37,9 @@ module OrderGroupServices
           if @order_group.parent_order_group.nil?
             delete_child_order_group(@order_group)
           end
+          deliver_order = @order_group.delivery_order
+          deliver_order.line_items.destroy
+          deliver_order.destroy!
           @order_group.destroy!
           @success = true
           @errors = []

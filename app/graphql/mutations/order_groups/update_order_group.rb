@@ -11,7 +11,7 @@ class Mutations::OrderGroups::UpdateOrderGroup < Mutations::BaseMutation
       service = ::OrderGroupServices::UpdateOrderGroup.new(order_group_id, update_order.to_h, current_user).execute
 
       if service.success?
-        { order: service.order_group, line_items: service.order_group.line_items, message: "successfully updated a order.", errors: [] }
+        { order: service.order_group, message: "successfully updated a order.", errors: [] }
       else
         { order: nil, line_items: nil, message: "Failed to update order.", errors: service.errors }
       end
