@@ -9,7 +9,7 @@ class ::Mutations::Vehicles::CreateVehicle < ::Mutations::BaseMutation
     service = ::VehiclesServices::CreateVehiclesServices.new(vehicle_input.to_h, current_user).execute
 
     if service.success?
-      { vehicle: [ service.vehicle ], message: "successfully created a vehicle", errors: [] }
+      { vehicle: [ service.vehicle ], message: "successfully Added a vehicle", errors: [] }
     else
       { vehicle: nil, message: nil, errors: service.errors }
     end

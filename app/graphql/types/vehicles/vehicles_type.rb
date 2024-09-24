@@ -10,6 +10,10 @@ module Types
       field :status, ::Types::Vehicles::StatusType, null: false
       field :capacity, Integer, null: true
       field :group_id, ID, null: false
+      field :image_url, [ String ], null: true
+    end
+    def image_url
+      object.image_url
     end
   end
 end

@@ -6,6 +6,7 @@ module Types
       argument :vehicle_type, String, required: false
       argument :status, StatusType, required: true
       argument :capacity, Integer, required: true
+      argument :image, [ String ], required: false
       # argument :group_id, ID, required: true
     end
   end
