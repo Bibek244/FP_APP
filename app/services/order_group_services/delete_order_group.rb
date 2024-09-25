@@ -57,8 +57,10 @@ module OrderGroupServices
       order_group.child_order_groups.each do |child_order_group|
         delivery_order = child_order_group.delivery_order
         if delivery_order&.status == "pending"
-          delivery_order.destroy
           child_order_group.destroy
+        else
+          @error << " This ordergroup has order which cannot be deleted"
+          raise ActiveRecord::Rollback
         end
       end
     end
