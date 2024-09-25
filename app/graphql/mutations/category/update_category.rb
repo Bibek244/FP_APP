@@ -11,7 +11,7 @@ module Mutations
         current_user = context[:current_user]
         ActsAsTenant.current_tenant = current_user.group
 
-        category = Category.find_by(id: id)
+        category = ::Category.find_by(id: id)
 
         if category.nil?
           return {
@@ -23,7 +23,7 @@ module Mutations
 
         if category.update(name: category_input.name)
           {
-            category: category,
+            category: [ category ],
             errors: [],
             message: "Category updated successfully."
           }
