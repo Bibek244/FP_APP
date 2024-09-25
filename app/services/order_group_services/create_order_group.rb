@@ -35,10 +35,14 @@ module OrderGroupServices
           raise ActiveRecord::Rollback
         end
 
+
         @order_group = create_order_group(customer, customer_branch)
         delivery_order = create_delivery_order(@order_group, customer, customer_branch)
         create_line_items(delivery_order)
-
+       
+        if @order_group.save!
+          OrderMailMailer.create_order_mailer(customer, @order_group).deliver_now
+        end
         @success = true
       end
     rescue ActiveRecord::RecordInvalid => err
@@ -82,6 +86,7 @@ module OrderGroupServices
         dispatched_date: order_attributes[:dispatched_date],
         delivery_date: order_attributes[:delivery_date]
       )
+      
     end
 
     def create_line_items(delivery_order)
