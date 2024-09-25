@@ -5,7 +5,7 @@ class Resolvers::Category::AllCategory < Resolvers:: BaseResolver
     authorize
     current_user = context[:current_user]
     ActsAsTenant.current_tenant = current_user.group
-    categories = Category.order(desc: :create_at)
+    categories = Category.all
 
     if categories.empty?
       { category: nil, message: nil, errors: [ "No category found" ] }
