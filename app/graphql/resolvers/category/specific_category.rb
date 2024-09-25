@@ -8,11 +8,11 @@ class Resolvers::Category::SpecificCategory < Resolvers::BaseResolver
     authorize
     current_user = context[:current_user]
     ActsAsTenant.current_tenant = current_user.group
-    categories = Category.find_by(id: id)
-    if categories.nil?
+    category = Category.find_by(id: id)
+    if category.nil?
       { category: nil, message: "failed to fetch category", errors: [ "Category with ID #{id} not found" ] }
     else
-      { category: [ categories ], message: "succesfully fetched category", errors: [] }
+      { category: [ category ], message: "succesfully fetched category", errors: [] }
     end
   end
 end
