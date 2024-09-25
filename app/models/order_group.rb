@@ -5,7 +5,7 @@ class OrderGroup < ApplicationRecord
   belongs_to :parent_order_group, class_name: "OrderGroup", optional: true
 
   has_one :delivery_order
-  has_many :line_items, dependent: :nullify
+  has_many :line_items, through: :delivery_order
   has_many :child_order_groups, class_name: "OrderGroup", foreign_key: "parent_order_group_id"
 
 

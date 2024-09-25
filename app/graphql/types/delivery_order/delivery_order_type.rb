@@ -10,6 +10,7 @@ module Types
       field :driver_id, Integer, null: false
       field :vehicle_id, Integer, null: false
       field :order_group_id, Integer, null: false
+      field :line_items, [ Types::LineItem::LineItemType ], null: true
       field :status, Types::DeliveryOrder::DeliveryStatus, null: false
       field :dispatched_date, GraphQL::Types::ISO8601Date
       field :delivery_date, GraphQL::Types::ISO8601Date

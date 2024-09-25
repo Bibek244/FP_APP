@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  module OrderGroups
+  module LineItem
     class LineItemType < Types::BaseObject
       field :id, ID, null: false
       field :goods_id, ID, null: false

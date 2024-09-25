@@ -1,8 +1,8 @@
 module Types
   module OrderGroups
     class UnitEnum < Types::BaseEnum
-      value "LITERS", "Liters", value: 0
-      value "GALLONS", "Gallons", value: 1
+      value "LITERS", value: "liters"
+      value "GALLONS", value: "gallons"
     end
   end
 end
