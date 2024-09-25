@@ -1,4 +1,6 @@
 class LineItem < ApplicationRecord
   belongs_to :goods
-  belongs_to :order_group
+  belongs_to :delivery_order
+
+  enum unit: { liters: 0, gallons: 1 }
 end

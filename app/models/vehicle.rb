@@ -7,5 +7,5 @@ class Vehicle < ApplicationRecord
 
 
   # belongs_to :group
-  has_many:delivery_orders
+  has_many :delivery_orders
 end

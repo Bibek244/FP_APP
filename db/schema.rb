@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_042424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id"], name: "index_categories_on_group_id"
+  end
 
   create_table "customer_branches", force: :cascade do |t|
     t.string "branch_location"
@@ -63,19 +71,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "group_id", null: false
     t.index ["group_id"], name: "index_drivers_on_group_id"
   end
 
   create_table "goods", force: :cascade do |t|
     t.string "name"
-    t.string "category"
     t.string "sold_as"
     t.string "unit"
     t.integer "availability"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_goods_on_category_id"
     t.index ["group_id"], name: "index_goods_on_group_id"
   end
 
@@ -90,9 +98,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "order_group_id", null: false
+    t.integer "unit"
+    t.bigint "delivery_order_id", null: false
+    t.index ["delivery_order_id"], name: "index_line_items_on_delivery_order_id"
     t.index ["goods_id"], name: "index_line_items_on_goods_id"
-    t.index ["order_group_id"], name: "index_line_items_on_order_group_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -115,9 +124,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.string "recurrence_frequency"
     t.date "next_due_date"
     t.date "recurrence_end_date"
+    t.integer "parent_order_group_id"
+    t.boolean "skip_update", default: false
     t.index ["customer_branch_id"], name: "index_order_groups_on_customer_branch_id"
     t.index ["customer_id"], name: "index_order_groups_on_customer_id"
     t.index ["group_id"], name: "index_order_groups_on_group_id"
+    t.index ["parent_order_group_id"], name: "index_order_groups_on_parent_order_group_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -149,6 +161,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
     t.index ["group_id"], name: "index_vehicles_on_group_id"
   end
 
+  add_foreign_key "categories", "groups"
   add_foreign_key "customer_branches", "customers"
   add_foreign_key "customer_branches", "groups"
   add_foreign_key "customers", "groups"
@@ -159,9 +172,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_19_040924) do
   add_foreign_key "delivery_orders", "order_groups"
   add_foreign_key "delivery_orders", "vehicles"
   add_foreign_key "drivers", "groups"
+  add_foreign_key "goods", "categories"
   add_foreign_key "goods", "groups"
+  add_foreign_key "line_items", "delivery_orders"
   add_foreign_key "line_items", "goods", column: "goods_id"
-  add_foreign_key "line_items", "order_groups"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "order_groups", "customer_branches"

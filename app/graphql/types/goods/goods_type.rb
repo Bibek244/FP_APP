@@ -3,7 +3,7 @@ module Types
     class GoodsType < Types::BaseObject
       field :id, ID, null: false
       field :name, String
-      field :category, String
+      field :category, Types::Category::CategoryType
       field :sold_as, String
       field :unit, String
       field :availability, AvailabilityType

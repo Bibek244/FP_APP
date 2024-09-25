@@ -12,6 +12,10 @@ module Types
       field :recurrence_frequency, String, null: true
       field :next_due_date, GraphQL::Types::ISO8601Date, null: true
       field :recurrence_end_date, GraphQL::Types::ISO8601Date, null: true
+      field :parent_order_group_id, ID, null: true
+      field :line_items, [ Types::LineItem::LineItemType ], null: true
+      field :child_order_groups, [ Types::OrderGroups::OrderGroupType ], null: true
+      field :delivery_order, Types::DeliveryOrder::DeliveryOrderType, null: true
       field :created_at, GraphQL::Types::ISO8601DateTime, null: false
       field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     end

@@ -1,8 +1,13 @@
 class OrderGroup < ApplicationRecord
-  belongs_to :group
+  acts_as_tenant(:group)
   belongs_to :customer
   belongs_to :customer_branch
-  has_many :line_items, dependent: :destroy
+  belongs_to :parent_order_group, class_name: "OrderGroup", optional: true
+
+  has_one :delivery_order, dependent: :destroy
+  has_many :line_items, through: :delivery_order
+  has_many :child_order_groups, class_name: "OrderGroup", foreign_key: "parent_order_group_id", dependent: :destroy
+
 
   validates :group, :customer, :customer_branch, presence: true
   validates :recurring, inclusion: { in: [ true, false ] }

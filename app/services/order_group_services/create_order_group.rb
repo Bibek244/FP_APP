@@ -1,11 +1,11 @@
-
 module OrderGroupServices
   class CreateOrderGroup
     attr_accessor :success, :errors
     attr_reader :order_group
 
-    def initialize(create_order)
+    def initialize(create_order, current_user)
       @create_order = create_order
+      @current_user = current_user
       @success = false
       @errors = []
     end
@@ -27,56 +27,111 @@ module OrderGroupServices
 
     def call
       ActiveRecord::Base.transaction do
-        customer_branch = CustomerBranch.find_by(id: @create_order[:customer_branch_id])
-        unless customer_branch
-          @errors << "CustomerBranch was not found"
-          raise ActiveRecord::Rollback
-        end
-
+        ActsAsTenant.current_tenant = @current_user.group
+        customer_branch = find_customer_branch(@create_order[:customer_branch_id])
         customer = customer_branch.customer_id
-        unless customer
-          @errors << "Customer was not found"
-          raise ActiveRecord::Rollback
+        if @create_order[:recurring]
+          validate_recurrence_dates
         end
 
-        @order_group = OrderGroup.create!(
-          group_id: @create_order[:group_id],
-          planned_at: @create_order[:planned_at],
-          customer_id: customer,
-          customer_branch_id: customer_branch.id,
-          recurring: @create_order[:recurring],
-          recurrence_frequency: @create_order[:recurrence_frequency],
-          next_due_date: @create_order[:next_due_date],
-          recurrence_end_date: @create_order[:recurrence_end_date]
 
-        )
+        @order_group = create_order_group(customer, customer_branch)
+        delivery_order = create_delivery_order(@order_group, customer, customer_branch)
+        create_line_items(delivery_order)
+       
         if @order_group.save!
           OrderMailMailer.create_order_mailer(customer, @order_group).deliver_now
         end
-
-
-        @create_order[:lined_items_attributes].each do |item_attributes|
-          line_item = @order_group.line_items.find_by(id: item_attributes[:id])
-
-          if line_item
-            line_item.update!(
-              goods_id: item_attributes[:goods_id],
-              quantity: item_attributes[:quantity]
-            )
-          else
-            @order_group.line_items.create!(
-              goods_id: item_attributes[:goods_id],
-              quantity: item_attributes[:quantity]
-            )
-          end
-          @success = true
-          @errors = []
-        end
+        @success = true
       end
     rescue ActiveRecord::RecordInvalid => err
-      @success = false
-      @errors << err.message
+      handle_error(err)
     rescue => err
+      handle_error(err)
+    end
+
+    def find_customer_branch(branch_id)
+      customer_branch = CustomerBranch.find_by(id: branch_id)
+      unless customer_branch
+        @errors << "CustomerBranch was not found"
+        raise ActiveRecord::Rollback
+      end
+      customer_branch
+    end
+
+    def validate_recurrence_dates
+      recurrence_frequency = @create_order[:recurrence_frequency]
+      recurrence_end_date = @create_order[:recurrence_end_date]
+      planned_at = @create_order[:planned_at]
+
+      case recurrence_frequency
+      when "daily"
+        if recurrence_end_date < planned_at + 1.day
+          @errors << "For daily recurrence, recurrence_end_date must be at least a day from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      when "weekly"
+        if recurrence_end_date < planned_at + 1.week
+          @errors << "For weekly recurrence, recurrence_end_date must be at least a week from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      when "monthly"
+        if recurrence_end_date < planned_at + 1.month
+          @errors << "For monthly recurrence, recurrence_end_date must be at least a month from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      else
+        @errors << "Invalid recurrence frequency"
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    def create_order_group(customer, customer_branch)
+      if @create_order[:planned_at] < Time.current
+        @errors << "planned_at date cannot be in past "
+        raise ActiveRecord::Rollback
+      end
+      OrderGroup.create!(
+        group_id: @current_user.group_id,
+        planned_at: @create_order[:planned_at],
+        customer_id: customer,
+        customer_branch_id: customer_branch.id,
+        recurring: @create_order[:recurring],
+        recurrence_frequency: @create_order[:recurrence_frequency],
+        next_due_date: @create_order[:planned_at],
+        recurrence_end_date: @create_order[:recurrence_end_date]
+      )
+    end
+
+    def create_delivery_order(order_group, customer, customer_branch)
+      order_attributes = @create_order[:delivery_order_attributes]
+
+      order_group.create_delivery_order!(
+        group_id: @current_user.group_id,
+        customer_id: customer,
+        customer_branch_id: customer_branch.id,
+        driver_id: order_attributes[:driver_id],
+        vehicle_id: order_attributes[:vehicle_id],
+        status: "pending",
+        dispatched_date: nil,
+        delivery_date: nil
+      )
+      
+    end
+
+    def create_line_items(delivery_order)
+      delivery_order_attributes = @create_order[:delivery_order_attributes]
+      line_items_attributes = delivery_order_attributes[:lined_items_attributes]
+      line_items_attributes.each do |item_attributes|
+        delivery_order.line_items.create!(
+          goods_id: item_attributes[:goods_id],
+          quantity: item_attributes[:quantity],
+          unit: item_attributes[:unit]
+        )
+      end
+    end
+
+    def handle_error(err)
       @success = false
       @errors << err.message
     end
