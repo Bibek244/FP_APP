@@ -1,6 +1,6 @@
 class ::Resolvers::Driver::DriverStatus < Resolvers::BaseResolver
-  type [ Types::Driver::StatusEnum ], null: false
+  type [ String ], null: false
   def resolve
-    Types::Driver::StatusEnum.values.keys
+      Types::Driver::StatusEnum.values.keys
   end
 end
