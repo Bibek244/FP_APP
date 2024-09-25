@@ -4,7 +4,6 @@ class Resolvers::Category::SpecificCategory < Resolvers::BaseResolver
   argument :id, ID, required: true
 
   def resolve(id:)
-    binding.irb
     authorize
     current_user = context[:current_user]
     ActsAsTenant.current_tenant = current_user.group
