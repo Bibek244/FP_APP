@@ -2,7 +2,9 @@ class Resolvers::OrderGroups::AllOrderGroup < Resolvers::BaseResolver
   type [ Types::OrderGroups::OrderGroupResultType ], null: false
 
   def resolve
-    # Fetch all order groups with their associated line items
+    authorize
+    current_user = context[:current_user]
+    ActsAsTenant.current_tenant = current_user.group
     order_groups = OrderGroup.includes(:line_items).all
 
     if order_groups.present?

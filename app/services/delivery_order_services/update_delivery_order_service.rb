@@ -1,15 +1,14 @@
 module DeliveryOrderServices
   class UpdateDeliveryOrderService
-    attr_accessor :deliveryorder, :errors, :success, :message
-    attr_reader :deliveryorder_input, :deliveryorder_id
+    attr_accessor :errors, :success
+    attr_reader :delivery_order
 
-    def initialize(deliveryorder_id, deliveryorder_input = {})
-      @deliveryorder = nil
-      @deliveryorder_id = deliveryorder_id
-      @deliveryorder_input = deliveryorder_input
+    def initialize(delivery_order_id, deliveryorder_input = {}, current_user)
+      @delivery_order_id = delivery_order_id
+      @delivery_order_input = delivery_order_input
+      @current_user = current_user
       @success = false
       @errors = []
-      @message = nil
     end
 
     def execute
@@ -21,12 +20,13 @@ module DeliveryOrderServices
       @success
     end
 
-    def errros
-      @errros.join(", ")
+    def errors
+      @errors.join(", ")
     end
 
     private
     def call
+
       begin
         ActiveRecord::Base.transaction do
           @deliveryorder = DeliveryOrder.find_by(id: @deliveryorder_id)
@@ -39,13 +39,16 @@ module DeliveryOrderServices
           @message = "Delivery Order is updated successfully"
           handle_status_update
         end
-      rescue ActiveRecord::RecordInvalid => err
-        @success = false
-        @errors << err.message
-      rescue => err
-        @success = false
-        @errors << err.message
+        @delivery_order.update!(@deliveryorder_input.to_h.merge(group_id: @current_user.group))
+        @success = true
+        @errors = []
       end
+    rescue ActiveRecord::RecordInvalid => err
+        @success = false
+        @errors << err.message
+    rescue => err
+        @success = false
+        @errors << err.message
     end
 
     def handle_status_update

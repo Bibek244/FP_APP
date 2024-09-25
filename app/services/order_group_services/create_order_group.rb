@@ -4,8 +4,9 @@ module OrderGroupServices
     attr_accessor :success, :errors
     attr_reader :order_group
 
-    def initialize(create_order)
+    def initialize(create_order, current_user)
       @create_order = create_order
+      @current_user = current_user
       @success = false
       @errors = []
     end
@@ -27,6 +28,8 @@ module OrderGroupServices
 
     def call
       ActiveRecord::Base.transaction do
+        ActsAsTenant.current_tenant = @current_user.group
+
         customer_branch = CustomerBranch.find_by(id: @create_order[:customer_branch_id])
         unless customer_branch
           @errors << "CustomerBranch was not found"
@@ -40,7 +43,7 @@ module OrderGroupServices
         end
 
         @order_group = OrderGroup.create!(
-          group_id: @create_order[:group_id],
+          group_id: @current_user.group_id,
           planned_at: @create_order[:planned_at],
           customer_id: customer,
           customer_branch_id: customer_branch.id,

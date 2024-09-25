@@ -1,7 +1,6 @@
 module Types
   module DeliveryOrder
     class DeliveryOrderInputType < Types::BaseInputObject
-      argument :group_id, ID, required: true
       argument :customer_id, ID, required: true
       argument :customer_branch_id, ID, required: true
       argument :driver_id, ID, required: true

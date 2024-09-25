@@ -1,5 +1,4 @@
 class ::Mutations::DeliveryOrder::UpdateDeliveryOrder < Mutations::BaseMutation
-
   argument :deliveryorder_input, Types::DeliveryOrder::DeliveryOrderInputType, required: true
   argument :deliveryorder_id, ID, required: true
 
@@ -7,20 +6,18 @@ class ::Mutations::DeliveryOrder::UpdateDeliveryOrder < Mutations::BaseMutation
 
   def resolve(deliveryorder_input:, deliveryorder_id:)
     authorize
-
-    service = ::DeliveryOrderServices::UpdateDeliveryOrderService.new(deliveryorder_id, deliveryorder_input.to_h).execute
+    current_user = context[:current_user]
+    service = ::DeliveryOrderServices::UpdateDeliveryOrderService.new(deliveryorder_id, deliveryorder_input.to_h, current_user).execute
     if service.success?
       {
-        deliveryorder: service.deliveryorder,
+        delivery_order: service.delivery_order,
         message: "Successfully updated Delivery Order.",
-        success: true,
         errors: []
         }
     else
         {
-          deliveryorder: nil,
+          delivery_order: nil,
           message: nil,
-          success: false,
           errors: [ service.errors ]
         }
     end

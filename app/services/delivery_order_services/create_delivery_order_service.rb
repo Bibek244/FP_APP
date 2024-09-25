@@ -1,11 +1,11 @@
 module DeliveryOrderServices
   class CreateDeliveryOrderService
-    attr_accessor :deliveryorder, :errors, :success, :message
-    attr_reader :deliveryorder_input
+    attr_accessor :errors, :success
+    attr_reader :delivery_order
 
-    def initialize(deliveryorder_input = {})
-      @deliveryorder = deliveryorder
-      @deliveryorder_input = deliveryorder_input
+    def initialize(delivery_order_input = {}, current_user)
+      @delivery_order_input = delivery_order_input
+      @current_user = current_user
       @success = false
       @errors = []
       @message = nil
@@ -20,8 +20,9 @@ module DeliveryOrderServices
       @success
     end
 
-    def errros
-      @errros.join(", ")
+
+    def errors
+      @errors.join(", ")
     end
 
     private
@@ -31,14 +32,13 @@ module DeliveryOrderServices
           @deliveryorder = DeliveryOrder.create!(@deliveryorder_input.to_h.except(:status).merge(status: "pending"))
           @success = true
           @errors = []
-          @message = ""
         end
-        rescue ActiveRecord::RecordInvalid => err
-          @success = false
-          @errors << err.message
-        rescue StandardError => err
-          @success = false
-          @errors << err.message
+      rescue ActiveRecord::RecordInvalid => err
+        @success = false
+        @errors << err.message
+      rescue StandardError => err
+        @success = false
+        @errors << err.message
       end
     end
   end

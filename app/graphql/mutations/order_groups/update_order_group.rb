@@ -6,7 +6,9 @@ class Mutations::OrderGroups::UpdateOrderGroup < Mutations::BaseMutation
 
   type Types::OrderGroups::OrderGroupResultType, null: false
     def resolve(order_group_id:, update_order:)
-      service = ::OrderGroupServices::UpdateOrderGroup.new(order_group_id, update_order.to_h).execute
+      authorize
+      current_user = context[:current_user]
+      service = ::OrderGroupServices::UpdateOrderGroup.new(order_group_id, update_order.to_h, current_user).execute
 
       if service.success?
         { order: service.order_group, line_items: service.order_group.line_items, message: "successfully updated a order.", errors: [] }
