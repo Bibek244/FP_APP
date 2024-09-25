@@ -1,7 +1,7 @@
 class Mutations::Category::CreateCategory < Mutations::BaseMutation
     argument :category_input, Types::Category::CategoryInputType, required: true
 
-    type Types::Category::CategoryResultType
+    type Types::Category::CategoryResultType, null: false
 
   def resolve(category_input:)
     authorize
@@ -10,7 +10,7 @@ class Mutations::Category::CreateCategory < Mutations::BaseMutation
     category = Category.new(name: category_input.name, group_id: current_user.group_id)
     if category.save
       {
-        category: category,
+        category: [ category ],
         errors: [],
         message: "Category created successfully."
       }

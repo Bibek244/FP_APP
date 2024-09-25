@@ -44,6 +44,6 @@ module Types
     # CATEGORY MUTATIONS
     field :create_category, mutation: Mutations::Category::CreateCategory
     field :update_category, mutation: Mutations::Category::UpdateCategory
-    field :destory_category, mutation: Mutations::Category::UpdateCategory
+    field :delete_category, mutation: Mutations::Category::DeleteCategory
   end
 end

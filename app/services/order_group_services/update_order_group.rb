@@ -24,7 +24,7 @@ module OrderGroupServices
       self
     end
 
-    private
+
 
     def call
       ActiveRecord::Base.transaction do
@@ -32,9 +32,9 @@ module OrderGroupServices
 
         customer_branch = find_customer_branch(@update_order[:customer_branch_id])
         customer = customer_branch.customer_id
-        unless customer
-          @errors << "Customer was not found"
-          raise ActiveRecord::Rollback
+
+        if @update_order[:recurring]
+          validate_recurrence_dates
         end
 
         @order_group = OrderGroup.find_by(id: @order_group_id)
@@ -42,7 +42,6 @@ module OrderGroupServices
           @errors << "Order group was not found."
           raise ActiveRecord::Rollback
         end
-
         update_order_group(@order_group, customer, customer_branch)
 
         if @order_group.parent_order_group.nil?
@@ -66,15 +65,50 @@ module OrderGroupServices
       customer_branch
     end
 
+    def validate_recurrence_dates
+      recurrence_frequency = @update_order[:recurrence_frequency]
+      recurrence_end_date = @update_order[:recurrence_end_date]
+      planned_at = @update_order[:planned_at]
+
+      case recurrence_frequency
+      when "daily"
+        if recurrence_end_date < planned_at + 1.day
+          @errors << "For daily recurrence, recurrence_end_date must be at least a day from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      when "weekly"
+        if recurrence_end_date < planned_at + 1.week
+          @errors << "For weekly recurrence, recurrence_end_date must be at least a week from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      when "monthly"
+        if recurrence_end_date < planned_at + 1.month
+          @errors << "For monthly recurrence, recurrence_end_date must be at least a month from the planned_at date"
+          raise ActiveRecord::Rollback
+        end
+      else
+        @errors << "Invalid recurrence frequency"
+        raise ActiveRecord::Rollback
+      end
+    end
+
     def update_order_group(order_group, customer, customer_branch)
+      if @update_order[:planned_at] < Time.current
+        @errors << "planned_at date cannot be in past "
+        raise ActiveRecord::Rollback
+      end
       update_attributes = {
         group_id: @current_user.group_id,
         planned_at: @update_order[:planned_at],
         customer_id: customer,
-        customer_branch_id: customer_branch.id
+        customer_branch_id: customer_branch.id,
+        recurring: @update_order[:recurring],
+        recurrence_frequency: @update_order[:recurrence_frequency],
+        next_due_date: @update_order[:planned_at],
+        recurrence_end_date: @update_order[:recurrence_end_date]
       }
       begin
-        order_group.update!(update_attributes)
+        order_group.update!(update_attributes.except(:group_id))
       rescue ActiveRecord::Rollback => err
         @errors << "Failed to update order_group #{err.record.errors.full_messages.join(', ')}"
       end
@@ -84,6 +118,28 @@ module OrderGroupServices
 
     def update_delivery_order(order_group, customer, customer_branch)
       delivery_order_attributes = @update_order[:delivery_order_attributes]
+      status = delivery_order_attributes[:status]
+      if status == "delivered" && order_group.delivery_order.dispatched_date.nil?
+        @errors << "Cannot mark order as delivered without a dispatched date."
+        raise ActiveRecord::Rollback
+      end
+      dispatched_date = case status
+      when "on_the_way"
+        order_group.delivery_order.dispatched_date || Time.current
+      when "cancelled", "pending"
+        nil
+      else
+        order_group.delivery_order.dispatched_date
+      end
+
+      delivery_date = case status
+      when "delivered"
+        Time.current
+      when "cancelled", "pending", "on_the_way"
+        nil
+      else
+        order_group.delivery_order.delivery_date
+      end
 
       order_group.delivery_order.update!(
         group_id: @current_user.group_id,
@@ -92,8 +148,8 @@ module OrderGroupServices
         driver_id: delivery_order_attributes[:driver_id],
         vehicle_id: delivery_order_attributes[:vehicle_id],
         status: delivery_order_attributes[:status],
-        dispatched_date: delivery_order_attributes[:dispatched_date],
-        delivery_date: delivery_order_attributes[:delivery_date]
+        dispatched_date: dispatched_date,
+        delivery_date: delivery_date
       )
     end
 
@@ -135,7 +191,7 @@ module OrderGroupServices
             end
           else
             @errors << "LineItem with id #{item_attributes[:id]} not found"
-            raise ActiveRecord::Rollback
+            next
           end
         else
           begin
