@@ -6,7 +6,7 @@ module Types
       argument :driver_id, ID, required: true
       argument :vehicle_id, ID, required: true
       argument :order_group_id, ID, required: true
-      argument :status, Types::DeliveryOrder::DeliveryStatus, required: true
+      argument :status, Types::DeliveryOrder::DeliveryStatus, required: false
       argument :dispatched_date, GraphQL::Types::ISO8601Date
       argument :delivery_date, GraphQL::Types::ISO8601Date
     end

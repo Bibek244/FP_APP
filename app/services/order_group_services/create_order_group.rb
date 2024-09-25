@@ -53,6 +53,11 @@ module OrderGroupServices
           recurrence_end_date: @create_order[:recurrence_end_date]
 
         )
+        if @order_group.save!
+          OrderMailMailer.create_order_mailer(customer, @order_group).deliver_now
+        end
+
+
         @create_order[:lined_items_attributes].each do |item_attributes|
           line_item = @order_group.line_items.find_by(id: item_attributes[:id])
 

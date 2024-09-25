@@ -20,6 +20,7 @@ module DeliveryOrderServices
       @success
     end
 
+
     def errors
       @errors.join(", ")
     end
@@ -28,8 +29,7 @@ module DeliveryOrderServices
     def call
       begin
         ActiveRecord::Base.transaction do
-          ActsAsTenant.current_tenant = @current_user.group
-          @delivery_order = DeliveryOrder.create!(@delivery_order_input.to_h.merge(group_id: @current_user.group_id))
+          @deliveryorder = DeliveryOrder.create!(@deliveryorder_input.to_h.except(:status).merge(status: "pending"))
           @success = true
           @errors = []
         end
