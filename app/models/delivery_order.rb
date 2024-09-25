@@ -6,6 +6,6 @@ class DeliveryOrder < ApplicationRecord
   belongs_to :driver
   belongs_to :customer
 
-  has_many :line_items, dependent: :nullify
+  has_many :line_items, dependent: :destroy
   enum status: { pending: "0", on_the_way: "1", delivered: "2", cancelled: "3" }
 end

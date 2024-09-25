@@ -4,9 +4,9 @@ class OrderGroup < ApplicationRecord
   belongs_to :customer_branch
   belongs_to :parent_order_group, class_name: "OrderGroup", optional: true
 
-  has_one :delivery_order
+  has_one :delivery_order, dependent: :destroy
   has_many :line_items, through: :delivery_order
-  has_many :child_order_groups, class_name: "OrderGroup", foreign_key: "parent_order_group_id"
+  has_many :child_order_groups, class_name: "OrderGroup", foreign_key: "parent_order_group_id", dependent: :destroy
 
 
   validates :group, :customer, :customer_branch, presence: true
