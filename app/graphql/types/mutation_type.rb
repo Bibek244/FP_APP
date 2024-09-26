@@ -8,7 +8,8 @@ module Types
     field :delete_goods, mutation: Mutations::Goods::DeleteGoods
 
     # LOGIN AND REGISTRAGTION MUTATIONS
-    field :register_user, mutation: Mutations::Users::RegisterUser
+    field :create_new_user, mutation: Mutations::Users::RegisterUser
+    field :delete_user, mutation: Mutations::Users::DeleteUser
     field :login_user, mutation: Mutations::Users::LoginUser
     field :logout_user, mutation: Mutations::Users::LogoutUser
 
@@ -41,6 +42,7 @@ module Types
     field :create_delivery_order, mutation: Mutations::DeliveryOrder::CreateDeliveryOrder
     field :update_delivery_order, mutation: Mutations::DeliveryOrder::UpdateDeliveryOrder
 
+    
     # CATEGORY MUTATIONS
     field :create_category, mutation: Mutations::Category::CreateCategory
     field :update_category, mutation: Mutations::Category::UpdateCategory

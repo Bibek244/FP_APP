@@ -16,9 +16,7 @@ module Mutations
       def resolve(email:, password:, password_confirmation:, group_id:)
         group = Group.find(group_id)
         if group.present?
-          debugger
-          # user = User.create(email: email, password: password, password_confirmation: password_confirmation)
-          user = User.new(email: email, password: password, password_confirmation: password_confirmation)
+          user = User.new(email: email, password: password, password_confirmation: password_confirmation, group_id: group_id)
 
           if user.save
             membership = Membership.new(user_id: user.id, group_id: group_id)
