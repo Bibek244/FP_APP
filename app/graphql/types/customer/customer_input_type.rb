@@ -3,7 +3,7 @@ module Types
     class CustomerInputType < Types::BaseInputObject
       argument :name, String, required: true
       argument :address, String, required: true
-      argument :phone, Integer, required: true
+      argument :phone, String, required: true
       argument :email, String, required: true
     end
   end
