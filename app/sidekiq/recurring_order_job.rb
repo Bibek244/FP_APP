@@ -7,7 +7,7 @@ class RecurringOrderJob
     .where(order_groups: { parent_order_group_id: nil })
     .each do |delivery_order|
       order_group = delivery_order.order_group
-        if order_group.active_recurring? && Time.current >= order_group.next_due_date
+        if order_group.active_recurring? && Time.current >= order_group.next_due_date || true
 
           next_due_date = calculate_next_due_date(order_group)
 
@@ -15,7 +15,7 @@ class RecurringOrderJob
 
           begin
             child_order_group = create_child_order_group(order_group, next_due_date)
-            create_delivery_order(child_order_group, next_due_date, delivery_order)
+            create_delivery_order(child_order_group, delivery_order)
           rescue ActiveRecord::RecordInvalid => e
             logger.error "Failed to create child order group or delivery order: #{e.message}"
           end
@@ -37,7 +37,7 @@ class RecurringOrderJob
       child_order_group
     end
 
-  def create_delivery_order(child_order_group, next_due_date, delivery_order)
+  def create_delivery_order(child_order_group, delivery_order)
     new_delivery_order = DeliveryOrder.create!(
       order_group_id: child_order_group.id,
       vehicle_id: delivery_order[:vehicle_id],
@@ -45,8 +45,7 @@ class RecurringOrderJob
       driver_id: delivery_order[:driver_id],
       status: "pending",
       customer_id: delivery_order[:customer_id],
-      customer_branch_id: delivery_order[:customer_branch_id],
-      delivery_date: next_due_date
+      customer_branch_id: delivery_order[:customer_branch_id]
     )
 
     delivery_order.line_items.each do |parent_line_item|
