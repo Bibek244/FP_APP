@@ -4,7 +4,7 @@ module Types
       argument :name, String, required: true
       argument :email, String, required: true
       argument :address, String, required: true
-      argument :phone_no, Integer, required: true
+      argument :phone_no, String, required: true
       argument :status, Types::Driver::StatusEnum, required: true
       # argument :group_id, ID, required: true
     end

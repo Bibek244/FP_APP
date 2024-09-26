@@ -6,7 +6,7 @@ module Types
     field :id, ID, null: false
     field :name, String
     field :email, String
-    field :phone_no, Integer
+    field :phone_no, String
     field :address, String
     field :status, Types::Driver::StatusEnum, null: false
     field :group_id, Integer, null: false
