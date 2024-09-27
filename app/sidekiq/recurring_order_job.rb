@@ -1,41 +1,29 @@
 class RecurringOrderJob
   include Sidekiq::Job
 
-  def perform
-    DeliveryOrder.joins(:order_group)
-    .where(order_groups: { recurring: true  })
-    .where(order_groups: { parent_order_group_id: nil })
-    .each do |delivery_order|
-      order_group = delivery_order.order_group
-        if order_group.active_recurring? && Time.current >= order_group.next_due_date || true
-
-          next_due_date = calculate_next_due_date(order_group)
-
-          order_group.update!(next_due_date: next_due_date)
-
-          begin
-            child_order_group = create_child_order_group(order_group, next_due_date)
-            create_delivery_order(child_order_group, delivery_order)
-          rescue ActiveRecord::RecordInvalid => e
-            logger.error "Failed to create child order group or delivery order: #{e.message}"
-          end
-        end
+  def perform(order_group_id)
+    order_group = OrderGroup.find_by(id: order_group_id)
+    delivery_order = order_group.delivery_order
+    next_due_date = calculate_next_due_date(order_group)
+    while next_due_date < order_group.recurrence_end_date
+      child_order_group = create_child_order_group(order_group, next_due_date)
+      create_delivery_order(child_order_group, delivery_order)
+      next_due_date = calculate_next_due_date(child_order_group)
     end
   end
 
   private
 
-    def create_child_order_group(parent_order_group, next_due_date)
-      child_order_group = parent_order_group.child_order_groups.create!(
-        planned_at: next_due_date,
-        group_id: parent_order_group.group_id,
-        customer_id: parent_order_group.customer_id,
-        customer_branch_id: parent_order_group.customer_branch_id,
-        recurring: false
-      )
-
-      child_order_group
-    end
+  def create_child_order_group(parent_order_group, next_due_date)
+    child_order_group = parent_order_group.child_order_groups.create(
+      planned_at: next_due_date,
+      group_id: parent_order_group.group_id,
+      customer_id: parent_order_group.customer_id,
+      customer_branch_id: parent_order_group.customer_branch_id,
+      recurring: false
+    )
+    child_order_group
+  end
 
   def create_delivery_order(child_order_group, delivery_order)
     new_delivery_order = DeliveryOrder.create!(
@@ -56,15 +44,17 @@ class RecurringOrderJob
   end
 
   def calculate_next_due_date(order_group)
-    case order_group.recurrence_frequency
+    frequency = order_group.recurrence_frequency || order_group.parent_order_group.recurrence_frequency
+    next_due_date = order_group.next_due_date || order_group.planned_at
+    case frequency
     when "daily"
-      order_group.next_due_date + 1.day
+      next_due_date + 1.day
     when "weekly"
-      order_group.next_due_date + 1.week
+      next_due_date + 1.week
     when "monthly"
-      order_group.next_due_date.next_month
+      next_due_date.next_month
     else
-      order_group.next_due_date
+      raise "Unkown frequency"
     end
   end
 end

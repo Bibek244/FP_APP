@@ -97,6 +97,7 @@ module OrderGroupServices
         @errors << "planned_at date cannot be in past "
         raise ActiveRecord::Rollback
       end
+      recurrence_before_update = order_group.recurring?
       update_attributes = {
         group_id: @current_user.group_id,
         planned_at: @update_order[:planned_at],
@@ -112,6 +113,7 @@ module OrderGroupServices
       end
       begin
         order_group.update!(update_attributes.except(:group_id))
+        RecurringOrderJob.perform_async(order_group.id) if !recurrence_before_update
       rescue ActiveRecord::Rollback => err
         @errors << "Failed to update order_group #{err.record.errors.full_messages.join(', ')}"
       end
@@ -176,7 +178,7 @@ module OrderGroupServices
       begin
         child_order_group.update!(update_attributes)
       rescue ActiveRecord::RecordInvalid => err
-      @errors << "failed to update #{err.record.errors.full_messages.join(',')}"
+        @errors << "failed to update #{err.record.errors.full_messages.join(',')}"
       end
         # update_line_items(child_order_group.delivery_order)
         sync_line_items_from_parent_to_child(parent_order_group, child_order_group)
