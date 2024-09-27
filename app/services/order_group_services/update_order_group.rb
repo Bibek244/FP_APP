@@ -151,6 +151,14 @@ module OrderGroupServices
         dispatched_date: dispatched_date,
         delivery_date: delivery_date
       )
+      case status
+      when "on_the_way"
+        DispatchOrderMailer.dispatch_delivery_mailer(customer, @order_group).deliver_now
+      when "delivered"
+        CompletedOrderMailer.completed_delivery_mailer(customer, @order_group).deliver_now
+      when "cancelled"
+        CancelOrderMailer.cancel_order_mailer(customer, @order_group).deliver_now
+      end
     end
 
     def update_child_order_groups(parent_order_group)
