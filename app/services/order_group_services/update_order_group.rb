@@ -23,9 +23,7 @@ module OrderGroupServices
       call
       self
     end
-
-
-
+private
     def call
       ActiveRecord::Base.transaction do
         ActsAsTenant.current_tenant = @current_user.group
