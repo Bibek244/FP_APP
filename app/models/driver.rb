@@ -13,7 +13,6 @@ class Driver < ApplicationRecord
   validates :name, presence: true, length: { minimum: 3 }
   validates :address, presence: true, length: { minimum: 5 }
 
-
   private
 
   def nullify_delivery_orders_driver_id
