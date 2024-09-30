@@ -7,8 +7,8 @@ module Types
       field :group_id, Integer, null: false
       field :customer_id, Integer, null: false
       field :customer_branch_id, Integer, null: false
-      field :driver_id, Integer, null: true
-      field :vehicle_id, Integer, null: false
+      field :driver, Types::Driver::DriverType, null: true
+      field :vehicle, Types::Vehicles::VehiclesType, null: false
       field :order_group_id, Integer, null: false
       field :line_items, [ Types::LineItem::LineItemType ], null: true
       field :status, Types::DeliveryOrder::DeliveryStatus, null: false
