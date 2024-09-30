@@ -7,5 +7,6 @@ class DeliveryOrder < ApplicationRecord
   belongs_to :customer
 
   has_many :line_items, dependent: :destroy
-  enum status: { pending: "0", on_the_way: "1", delivered: "2", cancelled: "3" }
+
+  enum status: { pending: "PENDING", on_the_way: "ON_THE_WAY", delivered: "Delivered", cancelled: "CANCELLED" }
 end
