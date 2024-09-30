@@ -32,6 +32,7 @@ module Types
     field :add_driver, mutation: Mutations::Driver::CreateDriver
     field :delete_driver, mutation: Mutations::Driver::DeleteDriver
     field :update_driver, mutation: Mutations::Driver::UpdateDriver
+    field :reactivate_driver, mutation: Mutations::Driver::ReactivateDriver
 
     # ORDER MUTATIONS
     field :create_order_group, mutation: Mutations::OrderGroups::CreateOrderGroup
@@ -42,7 +43,6 @@ module Types
     field :create_delivery_order, mutation: Mutations::DeliveryOrder::CreateDeliveryOrder
     field :update_delivery_order, mutation: Mutations::DeliveryOrder::UpdateDeliveryOrder
 
-    
     # CATEGORY MUTATIONS
     field :create_category, mutation: Mutations::Category::CreateCategory
     field :update_category, mutation: Mutations::Category::UpdateCategory
