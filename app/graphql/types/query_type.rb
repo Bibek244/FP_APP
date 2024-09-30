@@ -65,8 +65,10 @@ module Types
      description: "Resolver for Specific Driver "
     field :alldrivers, resolver: Resolvers::Driver::AllDrivers,
      description: "Resolver for all Driver in an Group "
-    field :StatusEnum, resolver: Resolvers::Driver::DriverStatus
-     description :"Retrive all the status available for driver"
+    field :StatusEnum, resolver: Resolvers::Driver::DriverStatus,
+     description: "Retrive all the status available for driver"
+    field :active_drivers, resolver: Resolvers::Driver::ActiveDrivers,
+     description: "Retrive all active drivers"
 
     # QUERY FOR DELIVERY Order
     field :deliveryorder, resolver: Resolvers::DeliveryOrder::SpecificDeliveryOrder,
