@@ -14,8 +14,8 @@ RSpec.describe Mutations::Users::LoginUser, type: :request do
 
   let(:query) do
     <<-GRAPHQL
-      mutation LoginUser($email: String!, $password: String!, $group_id: ID!) {#{'  '}
-        loginUser(input: { email: $email, password: $password, groupId: $group_id }) {#{' '}
+      mutation LoginUser($email: String!, $password: String!, $group_id: ID!) {
+        loginUser(input: { email: $email, password: $password, groupId: $group_id }) {
           user {
             id
             email
