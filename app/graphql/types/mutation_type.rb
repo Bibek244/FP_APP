@@ -23,6 +23,7 @@ module Types
     field :add_customerBranch, mutation: Mutations::CustomerBranch::AddCustomerBranch
     field :delete_customerBranch, mutation: Mutations::CustomerBranch::DeleteCustomerBranch
     field :update_customerBranch, mutation: Mutations::CustomerBranch::UpdateCustomerBranch
+    field :reactivate_customerBranch, mutation: Mutations::CustomerBranch::ReactivateCustomerBranch
 
     # VEHICLES MUTATIONS
     field :create_vehicle, mutation: Mutations::Vehicles::CreateVehicle

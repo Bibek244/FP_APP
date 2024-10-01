@@ -7,6 +7,6 @@ class ::Resolvers::CustomerBranch::AllBranches < Resolvers::BaseResolver
     authorize
     current_user = context[:current_user]
     ActsAsTenant.current_tenant = current_user.group
-    ::CustomerBranch.where(customer_id: customer_id).order(created_at: :desc)
+    ::CustomerBranch.with_deleted.where(customer_id: customer_id).order(created_at: :desc)
   end
 end

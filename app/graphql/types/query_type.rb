@@ -61,6 +61,8 @@ module Types
       description: "Resolver to Fetch a specific Branch"
     field :allBranches, resolver: Resolvers::CustomerBranch::AllBranches,
       description: "Resolver to Fetch all Branches of a customer"
+    field :activeBranches, resolver: Resolvers::CustomerBranch::ActiveBranches,
+      description: "Resolver to Fetch all the Branches of a customer which are active"
 
     # QUERY FOR DRIVER
     field :driver, resolver: Resolvers::Driver::SpecificDriver,
