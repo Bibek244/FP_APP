@@ -17,6 +17,7 @@ module Types
     field :create_customer, mutation: Mutations::Customer::CreateCustomer
     field :delete_customer, mutation: Mutations::Customer::DeleteCustomer
     field :update_customer, mutation: Mutations::Customer::UpdateCustomer
+    field :reactivate_customer, mutation: Mutations::Customer::ReactivateCustomer
 
     # CUSTOMER BRANCH MUTATIONS
     field :add_customerBranch, mutation: Mutations::CustomerBranch::AddCustomerBranch
