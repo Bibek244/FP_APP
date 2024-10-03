@@ -10,6 +10,7 @@ module Types
       field :status, ::Types::Vehicles::StatusType, null: false
       field :capacity, Integer, null: true
       field :group_id, ID, null: false
+      field :deleted_at, GraphQL::Types::ISO8601DateTime, null: true
     end
   end
 end

@@ -29,6 +29,7 @@ module Types
     field :create_vehicle, mutation: Mutations::Vehicles::CreateVehicle
     field :update_vehicle, mutation: Mutations::Vehicles::UpdateVehicle
     field :delete_vehicle, mutation: Mutations::Vehicles::DeleteVehicle
+    field :reactivate_vehicle, mutation: Mutations::Vehicles::ReactivateVehicle
 
     # DRIVER MUTATIONS
     field :add_driver, mutation: Mutations::Driver::CreateDriver

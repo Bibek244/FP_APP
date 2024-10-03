@@ -47,6 +47,8 @@ module Types
       description: "Resolver to fetch specific vehicle"
     field :status_enum_values, resolver: Resolvers::Vehicles::AllStatus,
       description: "Retrieve the possible values for the StatusType enum"
+    field :active_vehicles, resolver: Resolvers::Vehicles::ActiveVehicles,
+      description: "Resolver to fetch all active vehicle"
 
     # QUERY FOR CUSTOMER
     field :customer, resolver: Resolvers::Customer::SpecificCustomer,
