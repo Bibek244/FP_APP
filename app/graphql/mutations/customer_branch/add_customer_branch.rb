@@ -17,7 +17,7 @@ class ::Mutations::CustomerBranch::AddCustomerBranch < Mutations::BaseMutation
       }
     else
       {
-        customerbranch: nil,
+        customer_branch: nil,
         message: nil,
         success: false,
         errors: [ service.errors ]
