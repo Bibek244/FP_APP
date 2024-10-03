@@ -37,7 +37,6 @@ RSpec.describe Mutations::CustomerBranch::DeleteCustomerBranch, type: :request d
   end
  it 'deletes a branch do' do
     post '/graphql', params: { query: query, variables: variables }, headers: @headers
-    debugger
     expect(response).to be_successful
     json = JSON.parse(response.body)
     data = json['data']['deleteCustomerbranch']

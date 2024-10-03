@@ -40,7 +40,6 @@ RSpec.describe Mutations::CustomerBranch::AddCustomerBranch, type: :request do
 
   it 'creates a new Customer Branch' do
     post '/graphql', params: { query: query, variables: variables }, headers: @headers
-    debugger
     expect(response).to be_successful
 
     json = JSON.parse(response.body)

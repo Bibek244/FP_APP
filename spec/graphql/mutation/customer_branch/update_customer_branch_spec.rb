@@ -41,7 +41,6 @@ RSpec.describe Mutations::CustomerBranch::UpdateCustomerBranch, type: :request d
 
   it 'updates customer_branch' do
     post '/graphql', params: { query: query, variables: variables }, headers: @headers
-    debugger
     expect(response).to be_successful
     json = JSON.parse(response.body)
     data = json['data']['updateCustomerbranch']
