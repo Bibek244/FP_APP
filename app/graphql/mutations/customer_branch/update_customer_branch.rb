@@ -11,14 +11,14 @@ class ::Mutations::CustomerBranch::UpdateCustomerBranch < Mutations::BaseMutatio
 
     if service.success?
       {
-        customerbranch: service.customerbranch,
+        customer_branch: service.customerbranch,
         message: "Successfully updated Customer Branch .",
         success: true,
         errors: []
         }
     else
         {
-          customerbranch: nil,
+          customer_branch: nil,
           message: nil,
           success: false,
           errors: [ service.errors ]

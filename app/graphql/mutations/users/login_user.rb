@@ -17,8 +17,9 @@ module Mutations
 
         # debugger
         if group.present?
-          user = group.users.find_by(email: email)
-          if user.present?
+          user = User.find_by(email: email)
+          membership = Membership.find_by(user: user, group: group)
+          if membership.present?
             if user.valid_password?(password)
             # token = JWT.encode({ user_id: user.id }, "secret", "HS256")
             jti = SecureRandom.uuid
@@ -27,12 +28,12 @@ module Mutations
               {
                 token: token,
                 user: user,
-                message: "Login Sucessfull",
+                message: "Login Successful",
                 error: []
               }
             else
               {
-                token: [],
+                token: nil,
                 user: nil,
                 message: "Incorrect Password",
                 error: user.errors.full_messages
@@ -40,7 +41,7 @@ module Mutations
             end
           else
             {
-              token: [],
+              token: nil,
               user: nil,
               message: "User is not present in this organization",
               error: [ "User not present" ]
@@ -48,7 +49,7 @@ module Mutations
           end
         else
           {
-            token: [],
+            token: nil,
             user: nil,
             message: "Invalid Group",
             error: [ "Group is not found" ]
