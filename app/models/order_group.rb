@@ -1,6 +1,6 @@
 class OrderGroup < ApplicationRecord
   acts_as_tenant(:group)
-  belongs_to :customer
+  belongs_to :customer, -> { with_deleted }
   belongs_to :customer_branch
   belongs_to :parent_order_group, class_name: "OrderGroup", optional: true
 

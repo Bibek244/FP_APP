@@ -53,6 +53,8 @@ module Types
       description: "Resolver to Fetch a specific Customer"
     field :all_customers, resolver: Resolvers::Customer::AllCustomers,
       description: "Resolver to Fetch all customer "
+    field :active_customers, resolver: Resolvers::Customer::ActiveCustomers,
+      description: "Resovler to Fetch active customers"
 
     # QUERY FOR CUSTOMERBRANCH
     field :customerBranch, resolver: Resolvers::CustomerBranch::SpecificBranch,
