@@ -7,7 +7,7 @@ module Types
       field :group_id, Integer, null: false
       field :planned_at, GraphQL::Types::ISO8601Date, null: false
       field :customer, Types::Customer::CustomerType, null: true
-      field :customer_branch, Types::CustomerBranch::CustomerBranchType, null: false
+      field :customer_branch, Types::CustomerBranch::CustomerBranchType, null: true
       field :recurring, Boolean, null: false
       field :recurrence_frequency, String, null: true
       field :next_due_date, GraphQL::Types::ISO8601Date, null: true
