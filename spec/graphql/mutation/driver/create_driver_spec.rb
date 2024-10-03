@@ -16,8 +16,8 @@ RSpec.describe Mutations::Driver::CreateDriver, type: :request do
     {
       driverInput: {
         name: "DriverA",
-        address: "aasd",
-        phoneNo: 123456789,
+        address: "aasded",
+        phoneNo: "1234567809",
         status: "AVAILABLE",
         email: "driver@mail.com"
       }
@@ -41,14 +41,13 @@ RSpec.describe Mutations::Driver::CreateDriver, type: :request do
     GRAPHQL
   end
   it 'creates a driver' do
-    post '/graphql', params: { query: query, variables: variables }, headers: @headers
-    debugger
+    post '/graphql', params: { query: query, variables: variables.to_json }, headers: @headers
     expect(response).to be_successful
     json = JSON.parse(response.body)
     data = json['data']['addDriver']
     expect(data['driver']['name']).to eq('DriverA')
     expect(data['driver']['email']).to eq('driver@mail.com')
     expect(data['success']).to eq(true)
-    expect(data['errors']).to be_nil
+    expect(data['errors']).to eq([])
   end
 end
