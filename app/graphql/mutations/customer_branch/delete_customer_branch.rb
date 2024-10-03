@@ -17,7 +17,7 @@ class ::Mutations::CustomerBranch::DeleteCustomerBranch < Mutations::BaseMutatio
       }
     else
       {
-        customerbranch: nil,
+        customer_branch: nil,
         message: nil,
         errors: service.errors,
         success: false
