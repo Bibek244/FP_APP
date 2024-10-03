@@ -95,6 +95,7 @@ private
         @errors << "planned_at date cannot be in past "
         raise ActiveRecord::Rollback
       end
+      recurrence_before_update = order_group.recurring?
       update_attributes = {
         group_id: @current_user.group_id,
         planned_at: @update_order[:planned_at],
@@ -105,8 +106,12 @@ private
         next_due_date: @update_order[:planned_at],
         recurrence_end_date: @update_order[:recurrence_end_date]
       }
+      unless order_group.parent_order_group.nil?
+        update_attributes =  update_attributes.merge(skip_update: true)
+      end
       begin
         order_group.update!(update_attributes.except(:group_id))
+        RecurringOrderJob.perform_async(order_group.id) if !recurrence_before_update
       rescue ActiveRecord::Rollback => err
         @errors << "Failed to update order_group #{err.record.errors.full_messages.join(', ')}"
       end
@@ -171,9 +176,10 @@ private
       begin
         child_order_group.update!(update_attributes)
       rescue ActiveRecord::RecordInvalid => err
-      @errors << "failed to update #{err.record.errors.full_messages.join(',')}"
+        @errors << "failed to update #{err.record.errors.full_messages.join(',')}"
       end
-        update_line_items(child_order_group.delivery_order)
+        # update_line_items(child_order_group.delivery_order)
+        sync_line_items_from_parent_to_child(parent_order_group, child_order_group)
       end
     end
 
@@ -209,6 +215,24 @@ private
         end
       end
     end
+
+    def sync_line_items_from_parent_to_child(parent_order_group, child_order_group)
+      parent_line_items = parent_order_group.delivery_order.line_items
+
+      child_order_group.delivery_order.line_items.destroy_all
+
+      parent_line_items.each do |parent_item|
+        child_order_group.delivery_order.line_items.create!(
+          goods_id: parent_item.goods_id,
+          quantity: parent_item.quantity,
+          unit: parent_item.unit
+        )
+      end
+    rescue ActiveRecord::RecordInvalid => err
+      @errors << "Failed to copy line items to child order group: #{err.record.errors.full_messages.join(', ')}"
+      raise ActiveRecord::Rollback
+    end
+
 
     def validate_line_item_attributes!(item_attributes)
       if item_attributes[:goods_id].nil? || item_attributes[:quantity].nil?

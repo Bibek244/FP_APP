@@ -33,15 +33,11 @@ module OrderGroupServices
         if @create_order[:recurring]
           validate_recurrence_dates
         end
-
-
         @order_group = create_order_group(customer, customer_branch)
         delivery_order = create_delivery_order(@order_group, customer, customer_branch)
         create_line_items(delivery_order)
-       
-        if @order_group.save!
-          OrderMailMailer.create_order_mailer(customer, @order_group).deliver_now
-        end
+        RecurringOrderJob.perform_async(order_group.id) if @order_group.recurring?
+        OrderMailMailer.create_order_mailer(customer, @order_group).deliver_now if @order_group.save!
         @success = true
       end
     rescue ActiveRecord::RecordInvalid => err
@@ -105,7 +101,6 @@ module OrderGroupServices
 
     def create_delivery_order(order_group, customer, customer_branch)
       order_attributes = @create_order[:delivery_order_attributes]
-
       order_group.create_delivery_order!(
         group_id: @current_user.group_id,
         customer_id: customer,
@@ -116,7 +111,6 @@ module OrderGroupServices
         dispatched_date: nil,
         delivery_date: nil
       )
-      
     end
 
     def create_line_items(delivery_order)

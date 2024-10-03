@@ -15,6 +15,6 @@ class Resolvers::Csv::CsvExportResolver < Resolvers::BaseResolver
     FileUtils.mkdir_p(Rails.root.join("public", "csv_exports"))
     File.write(file_path, csv_data)
 
-    "/public/csv_exports/#{file_name}"
+    "/csv_exports/#{file_name}"
   end
 end

@@ -1,4 +1,4 @@
-class Resolvers::Vehicles::AllVehicles < Resolvers::BaseResolver
+class Resolvers::Vehicles::ActiveVehicles < Resolvers::BaseResolver
   type Types::Vehicles::VehiclesResultType, null: true
 
   def resolve
@@ -6,7 +6,7 @@ class Resolvers::Vehicles::AllVehicles < Resolvers::BaseResolver
     current_user = context[:current_user]
     ActsAsTenant.current_tenant = current_user.group
 
-   vehicles =  Vehicle.with_deleted
+   vehicles =  Vehicle.active
    if vehicles.nil?
      { vehicle: nil, message: "No vehicles found.", errors: [] }
    else

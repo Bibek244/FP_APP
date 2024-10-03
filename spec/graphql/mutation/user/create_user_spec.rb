@@ -14,8 +14,8 @@ RSpec.describe Mutations::Users::RegisterUser, type: :request do
 
   let(:query) do
     <<-GRAPHQL
-      mutation RegisterUser($email: String!, $password: String!, $passwordConfirmation: String!, $groupId: ID!) {
-        registerUser(input: {email: $email, password: $password, passwordConfirmation: $passwordConfirmation, groupId: $groupId}) {
+      mutation CreateNewUser($email: String!, $password: String!, $passwordConfirmation: String!, $groupId: ID!) {
+        createNewUser(input: {email: $email, password: $password, passwordConfirmation: $passwordConfirmation, groupId: $groupId}) {
         user {
           id
           email
@@ -30,10 +30,9 @@ RSpec.describe Mutations::Users::RegisterUser, type: :request do
   it 'creates a new user' do
     post '/graphql', params: { query: query, variables: variables }
     # headers: { 'Content-Type' => 'application/json' }
-
     expect(response).to be_successful
     json = JSON.parse(response.body)
-    data = json['data']['registerUser']
+    data = json['data']['createNewUser']
     expect(data['user']['email']).to eq('test@mail.com')
     expect(data['error']).to be_nil
   end

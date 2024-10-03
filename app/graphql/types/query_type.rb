@@ -47,26 +47,34 @@ module Types
       description: "Resolver to fetch specific vehicle"
     field :status_enum_values, resolver: Resolvers::Vehicles::AllStatus,
       description: "Retrieve the possible values for the StatusType enum"
+    field :active_vehicles, resolver: Resolvers::Vehicles::ActiveVehicles,
+      description: "Resolver to fetch all active vehicle"
 
     # QUERY FOR CUSTOMER
     field :customer, resolver: Resolvers::Customer::SpecificCustomer,
       description: "Resolver to Fetch a specific Customer"
     field :all_customers, resolver: Resolvers::Customer::AllCustomers,
       description: "Resolver to Fetch all customer "
+    field :active_customers, resolver: Resolvers::Customer::ActiveCustomers,
+      description: "Resovler to Fetch active customers"
 
     # QUERY FOR CUSTOMERBRANCH
     field :customerBranch, resolver: Resolvers::CustomerBranch::SpecificBranch,
       description: "Resolver to Fetch a specific Branch"
     field :allBranches, resolver: Resolvers::CustomerBranch::AllBranches,
       description: "Resolver to Fetch all Branches of a customer"
+    field :activeBranches, resolver: Resolvers::CustomerBranch::ActiveBranches,
+      description: "Resolver to Fetch all the Branches of a customer which are active"
 
     # QUERY FOR DRIVER
     field :driver, resolver: Resolvers::Driver::SpecificDriver,
      description: "Resolver for Specific Driver "
     field :alldrivers, resolver: Resolvers::Driver::AllDrivers,
      description: "Resolver for all Driver in an Group "
-    field :StatusEnum, resolver: Resolvers::Driver::DriverStatus
-     description :"Retrive all the status available for driver"
+    field :StatusEnum, resolver: Resolvers::Driver::DriverStatus,
+     description: "Retrive all the status available for driver"
+    field :active_drivers, resolver: Resolvers::Driver::ActiveDrivers,
+     description: "Retrive all active drivers"
 
     # QUERY FOR DELIVERY Order
     field :deliveryorder, resolver: Resolvers::DeliveryOrder::SpecificDeliveryOrder,

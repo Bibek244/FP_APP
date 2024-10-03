@@ -43,8 +43,8 @@ module CsvServices
               "",  # Empty for Status
               "",  # Empty for Delivery Date
               "",  # Empty for Dispatched Date
-              "",
-              "",
+              "",  # Empty for recurring
+              "",  # Empty for recurrence_frequencey
               line_item.goods.name, # Assuming `goods` has a `name` method
               line_item.quantity,
               line_item.unit

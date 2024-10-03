@@ -1,6 +1,0 @@
-:scheduler:
- :schedule:
-   recurring_order_worker:
-     cron: '0 0 * * *'
-     class: 'RecurringOrderJob'
-     queue: default
