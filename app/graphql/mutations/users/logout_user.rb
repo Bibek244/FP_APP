@@ -3,7 +3,6 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
   field :error, [ String ], null: true
   field :message, String, null: true
 
-  
   def resolve
     authorize
     if user
@@ -14,7 +13,8 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
           message: "User is already logged out"
         }
       else
-        if user.update(jti: nil)
+        invalid_jti = SecureRandom.uuid
+        if user.update(jti: invalid_jti)
         {
           success: true,
           error: [],
@@ -36,11 +36,10 @@ class ::Mutations::Users::LogoutUser < Mutations::BaseMutation
       }
     end
   end
-  
+
   private
 
   def user
     context[:current_user] # access the user in the context
   end
-
 end

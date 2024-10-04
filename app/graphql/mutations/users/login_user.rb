@@ -24,7 +24,7 @@ module Mutations
             # token = JWT.encode({ user_id: user.id }, "secret", "HS256")
             jti = SecureRandom.uuid
             user.update(jti: jti)
-            token = JWT.encode({ user_id: user.id, group_id: group_id, exp: 24.hour.from_now.to_i }, "secret", "HS256")
+            token = JWT.encode({ user_id: user.id, group_id: group_id, exp: 24.hour.from_now.to_i, jti: jti }, "secret", "HS256")
               {
                 token: token,
                 user: user,

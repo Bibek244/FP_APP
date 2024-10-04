@@ -14,7 +14,7 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
-      
+
       current_user: current_user_from_token
 
       # current_group: current_user.group.first || nil
@@ -60,9 +60,19 @@ class GraphqlController < ApplicationController
     token = request.headers["Authorization"].to_s.split(" ").last
     return unless token
 
+    begin
     decoded_token = JWT.decode token, hmac_secret, true, { algorithm: "HS256" }
-    User.find(decoded_token[0]["user_id"])
+    payload = decoded_token[0]
+    user = User.find(payload["user_id"])
+
+    if user.jti == payload["jti"]
+      user
+    else
+     raise JWT::VerificationError, "Invalid token"
+    end
+    rescue JWT::DecodeError, JWT::VerificationError => e
+    Rails.logger.info "Token validation failed: #{e.message}"
+    nil
+    end
   end
-
-
 end
