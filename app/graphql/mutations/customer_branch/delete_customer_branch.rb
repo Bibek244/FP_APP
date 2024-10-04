@@ -10,14 +10,14 @@ class ::Mutations::CustomerBranch::DeleteCustomerBranch < Mutations::BaseMutatio
 
     if service.success?
       {
-        customerbranch: service.customerbranch,
+        customer_branch: service.customerbranch,
         message: "Customer branch deleted Successfully",
         errors: nil,
         success: true
       }
     else
       {
-        customerbranch: nil,
+        customer_branch: nil,
         message: nil,
         errors: service.errors,
         success: false

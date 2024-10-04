@@ -7,20 +7,20 @@ class ::Mutations::CustomerBranch::AddCustomerBranch < Mutations::BaseMutation
     authorize
     current_user = context[:current_user]
     service = CustomerBranchServices::CreateCustomerBranchService.new(customerbranch_input.to_h, current_user).execute
-    
+
     if service.success?
       {
-        customerbranch: service.customerbranch,
+        customer_branch: service.customerbranch,
         message: "Successfully created new Customer Branch.",
         success: true,
         errors: []
       }
     else
       {
-        customerbranch: nil,
+        customer_branch: nil,
         message: nil,
         success: false,
-        errors: [service.errors]
+        errors: [ service.errors ]
       }
     end
   end
